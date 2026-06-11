@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ category.label }} Benchmarks — {{ site.site_name }}</title>
+    <meta name="description" content="{{ category.meta_description }}">
+    <link rel="canonical" href="{{ canonical }}" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ category.label }} Benchmarks — {{ site.site_name }}">
+    <meta property="og:description" content="{{ category.meta_description }}">
+    <meta property="og:url" content="{{ canonical }}">
+    <meta property="og:image" content="{{ site.site_url }}{{ site.logo_url }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ category.label }} Benchmarks — {{ site.site_name }}">
+    <meta name="twitter:description" content="{{ category.meta_description }}">
+
+    {% include '_head_icons.html' %}
+    {% include '_ga.html' %}
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main>
+        <div class="content-wrapper">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Home</a>
+                <span aria-hidden="true">/</span>
+                <span>{{ category.label }}</span>
+            </nav>
+
+            <header class="category-hero">
+                <p class="category-hero-emoji">{{ category.emoji }}</p>
+                <h1 class="category-hero-title">{{ category.label }} benchmarks</h1>
+                <p class="category-hero-desc">{{ category.description }}</p>
+                <p class="category-hero-meta">{{ insights|length }} insight{% if insights|length != 1 %}s{% endif %} · sourced effect sizes</p>
+            </header>
+
+            {% if insights %}
+            <section class="category-section">
+                <div class="insight-grid">
+                    {% for item in insights %}
+                    {% include '_insight_card.html' %}
+                    {% endfor %}
+                </div>
+            </section>
+            {% else %}
+            <div class="empty-state">
+                <p>No insights in this category yet. Check back soon.</p>
+            </div>
+            {% endif %}
+
+            <div class="page-nav-actions">
+                <a href="/" class="back-btn">← Explore topics</a>
+            </div>
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option B preview — {{ site.site_name }}</title>
+    {% include '_head_icons.html' %}
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .demo-intro {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 32px;
+        }
+        .demo-intro h1 { margin-top: 0; font-size: 1.5rem; }
+        .demo-intro p { color: var(--text-gray); }
+        .compare-grid {
+            display: grid;
+            gap: 32px;
+        }
+        .demo-item {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .demo-item h2 { font-size: 1.1rem; margin: 0 0 8px; }
+        .demo-item .hook { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 20px; }
+        .size-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            margin: 16px 0 8px;
+        }
+        .og-frame {
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #0f172a;
+        }
+        .og-frame img { width: 100%; display: block; }
+        .list-frame {
+            max-width: 300px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .list-frame img { width: 100%; display: block; }
+        .sizes-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            align-items: flex-start;
+        }
+        .note-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 28px;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="content-wrapper">
+        <article class="demo-intro">
+            <h1>Option B — programmatic cards</h1>
+            <p>
+                <strong>No AI image.</strong> The server draws a PNG from your insight data:
+                effect size (<code>+12–18%</code>), hook line, title, and category.
+                Same data powers Open Graph previews (Twitter/Slack/LinkedIn) and list thumbnails.
+            </p>
+            <div class="note-box">
+                Compare with <strong>Option A</strong> (Imagen illustration from <code>image_prompt</code>).
+                Option B is free, instant, and always matches your numbers.
+            </div>
+        </article>
+
+        <div class="compare-grid">
+            {% for item in samples %}
+            <section class="demo-item">
+                <h2>{{ item.title }}</h2>
+                <p class="hook"><strong>Hook:</strong> {{ item.hook or item.summary }}</p>
+                <div class="sizes-row">
+                    <div>
+                        <div class="size-label">OG / share (1200×630)</div>
+                        <div class="og-frame">
+                            <img src="/og/insight/{{ item.id }}.png" alt="OG card for {{ item.title }}" loading="lazy">
+                        </div>
+                        <p style="font-size:0.8rem;color:var(--text-gray);margin-top:8px;">
+                            <a href="/og/insight/{{ item.id }}.png" target="_blank">Open PNG</a>
+                        </p>
+                    </div>
+                    <div>
+                        <div class="size-label">List thumbnail (600×340)</div>
+                        <div class="list-frame">
+                            <img src="/og/insight/{{ item.id }}.png?size=list" alt="List card for {{ item.title }}" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endfor %}
+        </div>
+
+        <p style="text-align:center;margin-top:32px;">
+            <a href="/" class="back-btn">← Back to insights</a>
+        </p>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

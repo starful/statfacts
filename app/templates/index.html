@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ site.site_name }}</title>
+    <meta name="description" content="{{ site.meta_description }}">
+    <link rel="canonical" href="{{ canonical }}" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ site.site_name }}">
+    <meta property="og:description" content="{{ site.meta_description }}">
+    <meta property="og:url" content="{{ canonical }}">
+    <meta property="og:image" content="{{ site.site_url }}{{ site.logo_url }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ site.site_url }}{{ site.logo_url }}">
+    <meta name="twitter:title" content="{{ site.site_name }}">
+    <meta name="twitter:description" content="{{ site.meta_description }}">
+
+    {% include '_head_icons.html' %}
+    {% include '_ga.html' %}
+
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main>
+        <div class="content-wrapper">
+            {% if top_guides %}
+            <section class="guide-highlight-section">
+                <h2 class="section-title">📖 Methodology guides</h2>
+                <div class="guide-grid" id="guide-list">
+                    {% for guide in top_guides %}
+                    <a href="/guide/{{ guide.id }}" class="guide-card">
+                        <div class="card-content">
+                            <h3 class="card-title">{{ guide.title }}</h3>
+                            <p class="card-summary">{{ guide.summary }}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                <div class="view-all-container">
+                    <a href="/guide" class="btn-view-all">All guides</a>
+                </div>
+            </section>
+            {% endif %}
+
+            <section class="featured-categories-section">
+                <h2 class="section-title">Explore by topic</h2>
+                <div class="featured-category-grid">
+                    {% for cat in featured_categories %}
+                    <a href="/category/{{ cat.theme }}" class="featured-category-card{% if cat.count == 0 %} is-empty{% endif %}">
+                        <span class="featured-category-emoji">{{ cat.emoji }}</span>
+                        <h3 class="featured-category-label">{{ cat.label }}</h3>
+                        <p class="featured-category-desc">{{ cat.description }}</p>
+                        <span class="featured-category-count">{{ cat.count }} insight{% if cat.count != 1 %}s{% endif %}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section id="list-section">
+                <div id="insights-root" data-home-limit="{{ site.homepage_category_limit }}">
+                    {% for section in category_sections %}
+                    <section class="category-section" id="category-{{ section.theme }}">
+                        <h2 class="section-title">
+                            <a href="/category/{{ section.theme }}" class="section-title-link">{{ section.label }}</a>
+                        </h2>
+                        <div class="insight-grid">
+                            {% for item in section.insights %}
+                            {% include '_insight_card.html' %}
+                            {% endfor %}
+                        </div>
+                        {% if section.total > site.homepage_category_limit %}
+                        <div class="section-view-all">
+                            <a href="/category/{{ section.theme }}">View all {{ section.total }} →</a>
+                        </div>
+                        {% endif %}
+                    </section>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-status">
+                <div class="status-badge">{{ site.emoji }} <span id="total-items">{{ total_items }}</span> insights</div>
+                <div class="status-badge">📅 Updated: <span id="last-updated-date">{{ last_updated }}</span></div>
+            </div>
+            <div class="footer-content">
+                <p><strong>{{ site.site_name }}</strong><br>{{ site.footer_tagline }}</p>
+                <div class="footer-links">
+                    <a href="/about.html">About</a> |
+                    <a href="/privacy.html">Privacy</a>
+                </div>
+                <p class="copyright">&copy; {{ site.footer_year }} {{ site.site_name }}</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="/static/js/main.js?v=4"></script>
+</body>
+</html>

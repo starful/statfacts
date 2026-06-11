@@ -1,0 +1,10 @@
+.git/
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+# Thumbnails served from GCS in production; keep logo/assets in image
+app/static/images/*.jpg
+app/static/images/*.jpeg

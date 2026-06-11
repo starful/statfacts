@@ -1,0 +1,9 @@
+id,topic,intervention,outcome,effect_min,effect_max,effect_unit,categories,confidence,keywords
+# Top-level filter tags: ux | business | gaming | food | hr | travel | sports | health
+# Sub-tags: saas signup checkout baseball etc.
+signup-one-fewer-step,Signup friction,Remove one signup step,Signup completion rate,12,18,percent_relative,"ux,saas,signup",meta_analysis,"signup form conversion"
+social-login-signup,Social OAuth,Add Google/Apple one-click signup,Signup conversion rate,8,8,percent_point,"ux,saas,signup",ab_test,"oauth social login"
+checkout-field-reduction,Checkout UX,Reduce checkout fields to 12-14,Checkout conversion rate,20,60,percent_relative,"ux,checkout,business",meta_analysis,"cart checkout form fields"
+baseball-short-swing,MLB contact,Shorter Statcast swing path,Batting average vs slugging,2.3,11,percent_point,"sports,baseball",study,"bat swing length MLB"
+page-speed-bounce,Web performance,+1 second page load time,Bounce rate,7,11,percent_relative,"ux,business",estimate,"page speed core web vitals"
+sleep-productivity,Sleep extension,+1 hour sleep,Next-day task scores,10,25,percent_relative,"health,business",study,"sleep productivity"

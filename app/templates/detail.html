@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ post.title }} — {{ site.site_name }}</title>
+    <meta name="description" content="{{ post.summary }}">
+    <link rel="canonical" href="{{ site.site_url }}/insight/{{ post.id }}" />
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="{{ site.site_name }}">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="{{ post.title }}">
+    <meta property="og:description" content="{{ post.hook or post.summary }}">
+    <meta property="og:url" content="{{ site.site_url }}/insight/{{ post.id }}">
+    <meta property="og:image" content="{{ og_image_abs }}">
+    <meta property="og:image:secure_url" content="{{ og_image_abs }}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="{{ og_image_width }}">
+    <meta property="og:image:height" content="{{ og_image_height }}">
+    <meta property="og:image:alt" content="{{ post.title }}">
+    <link rel="image_src" href="{{ og_image_abs }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ og_image_abs }}">
+    <meta name="twitter:image:alt" content="{{ post.title }}">
+    <meta name="twitter:title" content="{{ post.title }}">
+    <meta name="twitter:description" content="{{ post.hook or post.summary }}">
+
+    {% include '_head_icons.html' %}
+    {% include '_ga.html' %}
+
+    <link rel="stylesheet" href="/static/css/style.css?v={{ site.asset_version }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <article class="detail-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span aria-hidden="true">/</span>
+            {% if primary_category_theme %}
+            <a href="/category/{{ primary_category_theme }}">{{ primary_category_label }}</a>
+            <span aria-hidden="true">/</span>
+            {% endif %}
+            <span>Insight</span>
+        </nav>
+
+        {% if post.thumbnail %}
+        <div class="detail-visual">
+            <img src="{{ post.thumbnail }}" alt="{{ post.title }}" class="detail-hero-img">
+            <div class="detail-visual-overlay">
+                <span class="effect-hero">{{ post.effect_display }}</span>
+            </div>
+        </div>
+        {% else %}
+        <div class="effect-block effect-block--detail">{{ post.effect_display }}</div>
+        {% endif %}
+
+        <h1 class="detail-title">{{ post.title }}</h1>
+
+        {% include '_share_bar.html' %}
+
+        <p class="detail-hook">{{ post.hook or post.summary }}</p>
+        <p class="detail-summary">{{ post.summary }}</p>
+        <div class="detail-badges">
+            <span class="confidence-badge badge-{{ post.confidence }}">{{ post.confidence_label }}</span>
+            {% for cat in post.categories %}
+            <span class="tag">{{ cat }}</span>
+            {% endfor %}
+        </div>
+
+        <section class="fact-sheet">
+            <div class="fact-row">
+                <span class="fact-label">If you…</span>
+                <span class="fact-value">{{ post.intervention }}</span>
+            </div>
+            <div class="fact-row">
+                <span class="fact-label">Then…</span>
+                <span class="fact-value">{{ post.outcome }} → <strong>{{ post.effect_display }}</strong></span>
+            </div>
+            {% if post.sample_context %}
+            <div class="fact-row">
+                <span class="fact-label">Context</span>
+                <span class="fact-value">{{ post.sample_context }}</span>
+            </div>
+            {% endif %}
+        </section>
+
+        <div class="detail-content">
+            {{ content | safe }}
+        </div>
+
+        {% if sources %}
+        <section class="sources-box">
+            <h3>Sources</h3>
+            <ul>
+                {% for src in sources %}
+                <li>
+                    {% if src.url %}
+                    <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer">{{ src.name }}</a>
+                    {% else %}
+                    {{ src.name }}
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+
+        {% if related %}
+        <section class="related-section">
+            <h3>Related insights</h3>
+            <div class="related-grid">
+                {% for item in related %}
+                <a href="{{ item.link }}" class="related-card">
+                    {% if item.thumbnail %}
+                    <img src="{{ item.thumbnail }}" alt="" class="related-thumb" loading="lazy">
+                    {% endif %}
+                    <div class="related-text">
+                        <span class="related-effect">{{ item.effect_label }}</span>
+                        <span class="related-title">{{ item.hook or item.title }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <div class="page-nav-actions">
+            {% if primary_category_theme %}
+            <a href="/category/{{ primary_category_theme }}" class="back-btn back-btn-secondary">← {{ primary_category_label }}</a>
+            {% endif %}
+            <a href="/" class="back-btn">← Explore topics</a>
+        </div>
+    </article>
+
+    {% include 'footer.html' %}
+</body>
+</html>

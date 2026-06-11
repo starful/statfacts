@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — {{ site.site_name }}</title>
+    {% include '_head_icons.html' %}
+    {% include '_ga.html' %}
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="detail-container">
+        <h1>About {{ site.site_name }}</h1>
+        <p>{{ site.site_name }} is a curated library of conditional benchmarks — when you change X, how much does Y move?</p>
+        <p>Each insight includes effect ranges, sample context, confidence level, and linked sources. Numbers are planning aids, not guarantees.</p>
+        <h2>Contact</h2>
+        <p>Built as part of the OK Series content stack. For inquiries, use your usual OK project contact channel.</p>
+        <div class="page-nav-actions">
+            <a href="/" class="back-btn">← Explore topics</a>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

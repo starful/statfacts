@@ -1,0 +1,35 @@
+<header>
+    <div class="container">
+        <div class="header-top">
+            <div class="header-left">
+                <a href="/guide" class="header-guide-link">📖 Guides</a>
+            </div>
+
+            <h1 class="site-logo">
+                <a href="/">
+                    <img src="{{ site.logo_url }}" alt="{{ site.site_name }}" class="logo-img" width="300" height="40">
+                </a>
+            </h1>
+
+            <div class="header-right">
+                <span class="lang-pill">EN</span>
+            </div>
+        </div>
+
+        {% if request.path == '/' %}
+        <div class="search-bar-wrap">
+            <input type="search" id="insight-search" class="search-input"
+                   placeholder="Search insights… e.g. signup, baseball, sleep" autocomplete="off">
+        </div>
+        <div class="theme-filter-buttons" data-group="category">
+            {% for btn in site.filter_buttons %}
+            <button class="theme-button {% if loop.first %}active{% endif %}"
+                    data-theme="{{ btn.theme }}">
+                {{ btn.label }}
+                <span class="count-badge" id="{{ btn.count_id }}">0</span>
+            </button>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</header>
