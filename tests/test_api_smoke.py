@@ -29,7 +29,15 @@ class ApiSmokeTest(unittest.TestCase):
         self.assertIn(b"copy link", body)
         self.assertNotIn(b"copy quote", body)
         self.assertIn(b"share-btn-x", body)
+        self.assertIn(b"reaction-panel", body)
         self.assertIn(b"/social/signup-one-fewer-step.jpg", body)
+
+    def test_reactions_api_returns_counts(self):
+        response = self.client.get("/api/reactions/smoke-test-slug")
+        self.assertEqual(response.status_code, 200)
+        payload = response.get_json()
+        self.assertIn("likes", payload)
+        self.assertIn("dislikes", payload)
 
     def test_robots_and_sitemap_exist(self):
         robots = self.client.get("/robots.txt")

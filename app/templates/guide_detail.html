@@ -69,6 +69,7 @@
     }
     </script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -95,6 +96,10 @@
         <div class="detail-content">
             {{ content | safe }}
         </div>
+
+        {% with reaction_slug=guide_id %}
+        {% include 'partials/reactions.html' %}
+        {% endwith %}
 
         <div class="page-nav-actions">
             <a href="/guide" class="back-btn back-btn-secondary">← All guides</a>

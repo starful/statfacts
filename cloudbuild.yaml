@@ -49,5 +49,5 @@ substitutions:
   _REPO_NAME: 'statfacts-repo'
   _SERVICE_NAME: 'statfacts'
   _SITE_URL: 'https://statfacts.net'
-  _ASSET_VERSION: '2026-06-11e'
+  _ASSET_VERSION: '2026-06-13a'
   _GA_ID: 'G-PRF80TCG3Z'

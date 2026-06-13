@@ -7,3 +7,5 @@ requests
 Pillow
 python-dotenv
 google-genai
+firebase-admin
+google-cloud-firestore

@@ -30,6 +30,7 @@
     {% include '_head_icons.html' %}
     {% include '_ga.html' %}
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css?v={{ site.asset_version }}">
 </head>
 <body>
@@ -107,6 +108,10 @@
             </ul>
         </section>
         {% endif %}
+
+        {% with reaction_slug=post.id %}
+        {% include 'partials/reactions.html' %}
+        {% endwith %}
 
         {% if related %}
         <section class="related-section">

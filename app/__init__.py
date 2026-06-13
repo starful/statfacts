@@ -8,6 +8,13 @@ app = Flask(__name__)
 Compress(app)
 
 try:
+    from .reactions import reactions_bp
+except ImportError:
+    from reactions import reactions_bp
+
+app.register_blueprint(reactions_bp)
+
+try:
     from .config import SITE_CONFIG
     from .card_renderer import render_insight_card, OG_SIZE, LIST_SIZE
 except ImportError:

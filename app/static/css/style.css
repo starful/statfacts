@@ -777,6 +777,100 @@ footer {
 
 .footer-links a { color: var(--accent-color); margin: 0 8px; }
 
+/* --- Reactions (like / dislike) --- */
+.reaction-panel {
+    margin-top: 48px;
+    margin-bottom: 8px;
+    padding: 28px 32px 32px;
+    border-radius: 20px;
+    border: 1px solid rgba(37, 99, 235, 0.14);
+    background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
+    box-shadow: 0 8px 28px rgba(37, 99, 235, 0.08);
+    text-align: center;
+}
+
+.reaction-panel-title {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: -0.02em;
+}
+
+.reaction-panel-subtitle {
+    margin: 0 0 22px;
+    font-size: 0.95rem;
+    color: var(--text-gray);
+}
+
+.reaction-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.reaction-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 140px;
+    padding: 14px 32px;
+    border-radius: 999px;
+    border: 2px solid var(--border);
+    background-color: var(--card-bg);
+    color: var(--text-gray);
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.reaction-btn i {
+    font-size: 1.35rem;
+    transition: transform 0.2s ease;
+}
+
+.reaction-btn:hover {
+    background-color: var(--bg-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+.reaction-btn:hover i {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.reaction-btn.active-like {
+    background-color: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+.reaction-btn.active-like:hover {
+    background-color: var(--accent-hover);
+}
+
+.reaction-btn.active-dislike {
+    background-color: #f43f5e;
+    color: #fff;
+    border-color: #f43f5e;
+}
+
+.reaction-btn.active-dislike:hover {
+    background-color: #e11d48;
+}
+
+@media (max-width: 768px) {
+    .reaction-panel { margin-top: 36px; padding: 24px 20px 28px; }
+    .reaction-panel-title { font-size: 1.15rem; }
+    .reaction-container { gap: 12px; }
+    .reaction-btn { min-width: 0; flex: 1 1 120px; max-width: 200px; padding: 12px 20px; }
+}
+
 @media (max-width: 600px) {
     .effect-hero { font-size: 2.25rem; }
     .fact-row { grid-template-columns: 1fr; gap: 4px; }

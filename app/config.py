@@ -21,7 +21,7 @@ SITE_CONFIG = {
     # 2. SEO / analytics
     # ----------------------------------------------------------
     "ga_id":         os.getenv("GA_ID", "G-PRF80TCG3Z"),
-    "asset_version": os.getenv("ASSET_VERSION", "2026-06-11e"),
+    "asset_version": os.getenv("ASSET_VERSION", "2026-06-13a"),
 
     # ----------------------------------------------------------
     # 3. Icon & theme
