@@ -1,7 +1,10 @@
-id,topic_en,topic_ko,keywords
-how-to-read-benchmarks,"How to read StatFacts benchmarks","StatFacts 벤치마크 읽는 법","read benchmarks effect size"
-relative-vs-absolute-effects,"Relative vs absolute effects","상대 효과 vs 절대 효과","relative percent percentage points"
-confidence-levels-explained,"Confidence levels explained","신뢰도 라벨 설명","meta-analysis ab test estimate"
-when-not-to-use-a-benchmark,"When not to use a benchmark","벤치마크를 쓰지 말아야 할 때","benchmark misuse context"
-how-to-cite-in-a-deck,"How to cite StatFacts in a deck","덱에서 StatFacts 인용하기","cite benchmark slide deck"
-planning-ab-test-from-benchmark,"Planning an A/B test from a benchmark","벤치마크로 A/B 테스트 계획","ab test planning mde"
+﻿id,topic_en,topic_ko,keywords
+how-to-read-benchmarks,How to read StatFacts benchmarks,StatFacts 벤치마크 읽는 법,read benchmarks effect size
+relative-vs-absolute-effects,Relative vs absolute effects,상대 효과 vs 절대 효과,relative percent percentage points
+confidence-levels-explained,Confidence levels explained,신뢰도 라벨 설명,meta-analysis ab test estimate
+when-not-to-use-a-benchmark,When not to use a benchmark,벤치마크를 쓰지 말아야 할 때,benchmark misuse context
+how-to-cite-in-a-deck,How to cite StatFacts in a deck,덱에서 StatFacts 인용하기,cite benchmark slide deck
+planning-ab-test-from-benchmark,Planning an A/B test from a benchmark,벤치마크로 A/B 테스트 계획,ab test planning mde
+guide_expand_001,How to read a Japanese menu at cafes and restaurants,일본 식당·카페 메뉴 읽는 법,japanese menu reading
+guide_expand_002,Cashless payment and IC cards for travelers in Japan,일본 여행 결제·교통카드 가이드,japan suica paypay cashless
+guide_expand_003,Seasonal travel tips for Japan (spring to winter),일본 계절별 여행 팁,japan seasonal travel
