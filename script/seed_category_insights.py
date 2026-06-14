@@ -5,6 +5,7 @@ import os
 import subprocess
 import sys
 import textwrap
+from datetime import date, timedelta
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
@@ -847,7 +848,7 @@ def main():
     created = 0
     skipped = 0
     created_paths = []
-    base_date = 20260501
+    start = date(2026, 5, 1)
 
     for i, item in enumerate(INSIGHTS):
         fname = f"{item['id']}_en.md"
@@ -855,8 +856,7 @@ def main():
         if os.path.exists(path):
             skipped += 1
             continue
-        day = base_date + i
-        date_str = f"{str(day)[:4]}-{str(day)[4:6]}-{str(day)[6:8]}"
+        date_str = (start + timedelta(days=i)).isoformat()
         with open(path, "w", encoding="utf-8") as f:
             f.write(render_md(item, date_str))
         created += 1

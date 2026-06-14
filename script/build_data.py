@@ -7,7 +7,7 @@ import json
 import re
 import importlib.util
 import frontmatter
-from datetime import datetime
+from datetime import datetime, date
 
 BASE_DIR    = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT_DIR = os.path.join(BASE_DIR, 'app', 'content')
@@ -66,6 +66,20 @@ def _format_effect(post) -> str:
     return f"{sign}{val:g}{suffix}"
 
 
+def _normalize_published(raw: str, fpath: str) -> str:
+    """Return valid YYYY-MM-DD; fall back to file mtime if frontmatter is invalid."""
+    s = str(raw or "").strip()[:10]
+    if s:
+        try:
+            return date.fromisoformat(s).isoformat()
+        except ValueError:
+            pass
+    try:
+        return datetime.fromtimestamp(os.path.getmtime(fpath)).strftime("%Y-%m-%d")
+    except OSError:
+        return datetime.now().strftime("%Y-%m-%d")
+
+
 def main():
     print("🔨 Building insights_data.json ...")
     insights = []
@@ -118,7 +132,7 @@ def main():
                 "confidence":   str(post.get('confidence', 'estimate')),
                 "hook":         str(post.get('hook', '') or post.get('summary', '')),
                 "thumbnail":    thumbnail,
-                "published":    str(post.get('date', datetime.now().strftime('%Y-%m-%d'))),
+                "published":    _normalize_published(post.get('date', ''), fpath),
                 "link":         f"/insight/{item_id}",
             })
         except Exception as e:
