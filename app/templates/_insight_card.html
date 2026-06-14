@@ -1,9 +1,10 @@
-<article class="insight-card">
+<article class="insight-card{% if item.is_new %} is-new{% endif %}">
     <a href="{{ item.link }}" class="insight-card-link">
         {% if item.thumbnail %}
         <div class="card-visual">
             <img src="{{ item.thumbnail }}" alt="" class="card-thumb" loading="lazy">
             <span class="effect-overlay">{{ item.effect_label }}</span>
+            {% if item.is_new %}<span class="badge-new">New</span>{% endif %}
         </div>
         {% else %}
         <div class="effect-block">{{ item.effect_label }}</div>
@@ -13,6 +14,7 @@
             <p class="card-preview">{{ item.hook or item.summary }}</p>
             <div class="card-meta">
                 <span class="confidence-badge badge-{{ item.confidence }}">{{ item.confidence }}</span>
+                {% if item.published %}<span class="published-date">{{ item.published }}</span>{% endif %}
             </div>
             <div class="card-tags">
                 {% for cat in item.categories[:3] %}

@@ -72,6 +72,13 @@ class ApiSmokeTest(unittest.TestCase):
         self.assertEqual(manifest.status_code, 200)
         self.assertIn("StatFacts", manifest.get_data(as_text=True))
 
+    def test_homepage_shows_latest_insights(self):
+        response = self.client.get("/")
+        self.assertEqual(response.status_code, 200)
+        body = response.data
+        self.assertIn(b"Latest insights", body)
+        self.assertIn(b"insight-card", body)
+
     def test_category_landing_page(self):
         response = self.client.get("/category/ux")
         self.assertEqual(response.status_code, 200)

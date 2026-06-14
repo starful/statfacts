@@ -16,6 +16,7 @@ SITE_CONFIG = {
     "meta_description": "Curated effect sizes with ranges, sources, and real-world context — UX, business, sports, and more.",
     "data_key":      "insights",
     "homepage_category_limit": 6,
+    "homepage_latest_limit": 6,
 
     # ----------------------------------------------------------
     # 2. SEO / analytics

@@ -28,6 +28,42 @@
 
     <main>
         <div class="content-wrapper">
+            {% if latest_insights %}
+            <section class="latest-insights-section">
+                <h2 class="section-title">Latest insights</h2>
+                <div class="insight-grid">
+                    {% for item in latest_insights %}
+                    <article class="insight-card{% if item.is_new %} is-new{% endif %}">
+                        <a href="{{ item.link }}" class="insight-card-link">
+                            {% if item.thumbnail %}
+                            <div class="card-visual">
+                                <img src="{{ item.thumbnail }}" alt="" class="card-thumb" loading="lazy">
+                                <span class="effect-overlay">{{ item.effect_label }}</span>
+                                {% if item.is_new %}<span class="badge-new">New</span>{% endif %}
+                            </div>
+                            {% else %}
+                            <div class="effect-block">{{ item.effect_label }}</div>
+                            {% endif %}
+                            <div class="card-content">
+                                <h3 class="card-title">{{ item.title }}</h3>
+                                <p class="card-preview">{{ item.hook or item.summary }}</p>
+                                <div class="card-meta">
+                                    <span class="confidence-badge badge-{{ item.confidence }}">{{ item.confidence }}</span>
+                                    {% if item.published %}<span class="published-date">{{ item.published }}</span>{% endif %}
+                                </div>
+                                <div class="card-tags">
+                                    {% for cat in item.categories[:3] %}
+                                    <span class="tag">{{ cat }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
             {% if top_guides %}
             <section class="guide-highlight-section">
                 <h2 class="section-title">📖 Methodology guides</h2>

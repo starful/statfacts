@@ -150,6 +150,47 @@ header {
     margin-bottom: 16px;
 }
 
+.latest-insights-section {
+    margin-bottom: 2.5rem;
+}
+
+.latest-insights-section .card-visual {
+    position: relative;
+}
+
+.latest-insights-section .badge-new {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+
+.insight-card.is-new .insight-card-link {
+    border-color: rgba(37, 99, 235, 0.35);
+}
+
+.published-date {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+.card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .category-section {
     margin-bottom: 36px;
 }

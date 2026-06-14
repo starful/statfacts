@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, render_template, abort, redirect, request, Response, send_from_directory
 from flask_compress import Compress
 import json, os, frontmatter, markdown, re, glob, hashlib, copy, urllib.request, io
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from urllib.parse import quote
 
 app = Flask(__name__)
@@ -131,19 +131,38 @@ def _category_sections(items, limit=None):
     if limit is None:
         limit = int(SITE_CONFIG.get('homepage_category_limit', 6))
     sections = []
+    cutoff = (date.today() - timedelta(days=14)).isoformat()
     for btn in SITE_CONFIG.get('filter_buttons', []):
         key = btn.get('theme')
         if not key or key == 'all':
             continue
         matched = [i for i in items if _insight_matches_theme(i, key, mapping)]
+        matched.sort(key=lambda x: x.get('published', ''), reverse=True)
         if matched:
+            insights = []
+            for item in matched[:limit]:
+                row = copy.deepcopy(item)
+                row['is_new'] = (row.get('published') or '') >= cutoff
+                insights.append(row)
             sections.append({
                 'theme': key,
                 'label': btn.get('label', key),
-                'insights': matched[:limit],
+                'insights': insights,
                 'total': len(matched),
             })
     return sections
+
+
+def _latest_insights(items, limit=None, new_days=14):
+    if limit is None:
+        limit = int(SITE_CONFIG.get('homepage_latest_limit', 6))
+    cutoff = (date.today() - timedelta(days=new_days)).isoformat()
+    out = []
+    for item in items[:limit]:
+        row = copy.deepcopy(item)
+        row['is_new'] = (row.get('published') or '') >= cutoff
+        out.append(row)
+    return out
 
 
 def _featured_category_lookup():
@@ -272,6 +291,7 @@ def index():
         lang='en',
         guides=CACHED_GUIDES,
         top_guides=top_guides,
+        latest_insights=_latest_insights(items),
         category_sections=_category_sections(items),
         featured_categories=_featured_categories(items),
         canonical=SITE_CONFIG['site_url'],
