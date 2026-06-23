@@ -21,6 +21,11 @@ except ImportError:
     from config import SITE_CONFIG
     from card_renderer import render_insight_card, OG_SIZE, LIST_SIZE
 
+try:
+    from .content_new import enrich_items
+except ImportError:
+    from content_new import enrich_items
+
 BASE_DIR    = app.root_path
 STATIC_DIR  = os.path.join(BASE_DIR, 'static')
 DATA_FILE   = os.path.join(STATIC_DIR, 'json', 'insights_data.json')
@@ -306,7 +311,7 @@ def category_page(theme):
         abort(404)
     items = CACHED_DATA.get(DATA_KEY, [])
     mapping = SITE_CONFIG.get('js_category_map', {})
-    insights = [i for i in items if _insight_matches_theme(i, theme, mapping)]
+    insights = enrich_items([i for i in items if _insight_matches_theme(i, theme, mapping)])
     insights.sort(key=lambda x: (x.get('published', ''), x.get('id', '')), reverse=True)
     stats = _get_footer_stats()
     canonical = f"{SITE_CONFIG['site_url'].rstrip('/')}/category/{theme}"
@@ -329,6 +334,7 @@ def api_insights():
         s['categories'] = list(dict.fromkeys(new_cats))
         s['confidence_label'] = CONFIDENCE_LABELS.get(s.get('confidence', ''), s.get('confidence', ''))
         spoofed.append(s)
+    spoofed = enrich_items(spoofed)
     return jsonify({DATA_KEY: spoofed, "last_updated": CACHED_DATA.get('last_updated')})
 
 

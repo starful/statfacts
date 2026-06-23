@@ -158,7 +158,8 @@ header {
     position: relative;
 }
 
-.latest-insights-section .badge-new {
+.latest-insights-section .badge-new,
+.insight-card .badge-new {
     position: absolute;
     top: 10px;
     left: 10px;

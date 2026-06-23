@@ -3,6 +3,7 @@
  */
 
 import { CATEGORY_MAP, CATEGORY_ORDER, CONFIDENCE_CLASS, HOME_CATEGORY_LIMIT } from './config.js';
+import { isContentNew, newBadgeHtml } from './content_new.js';
 
 function getHomeLimit() {
     const root = document.getElementById('insights-root');
@@ -44,7 +45,7 @@ function getFilteredData() {
     const q = searchQuery.trim().toLowerCase();
     const searchActive = Boolean(q);
 
-    return allInsights.filter(item => {
+    const filtered = allInsights.filter(item => {
         if (!searchActive && currentTheme !== 'all') {
             if (!itemMatchesTheme(item, currentTheme)) return false;
         }
@@ -80,14 +81,16 @@ function confidenceBadge(confidence) {
 }
 
 function renderCard(item) {
+    const isNew = item.is_new ?? isContentNew(item.published);
     const visual = item.thumbnail
         ? `<div class="card-visual">
                 <img src="${item.thumbnail}" alt="" class="card-thumb" loading="lazy">
                 <span class="effect-overlay">${item.effect_label || '—'}</span>
+                ${newBadgeHtml(isNew)}
            </div>`
         : `<div class="effect-block">${item.effect_label || '—'}</div>`;
     return `
-    <article class="insight-card">
+    <article class="insight-card${isNew ? ' is-new' : ''}">
         <a href="${item.link}" class="insight-card-link">
             ${visual}
             <div class="card-content">
