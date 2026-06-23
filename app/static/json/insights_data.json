@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026.06.19",
+  "last_updated": "2026.06.23",
   "total_count": 54,
   "insights": [
     {
@@ -30,7 +30,7 @@
       "id": "fiber-intake-gut-health_en",
       "slug": "fiber-intake-gut-health",
       "lang": "en",
-      "title": "Does increasing fiber improve gut regularity?",
+      "title": "How Fiber Intake Improves Gut Health and Regularity",
       "summary": "Doubling fiber toward 30g/day is commonly associated with a 15–35% relative improvement in regularity scores in short dietary studies.",
       "categories": [
         "health",
@@ -478,7 +478,7 @@
       "id": "employee-referral-quality_en",
       "slug": "employee-referral-quality",
       "lang": "en",
-      "title": "Do referral hires outperform job-board hires?",
+      "title": "Employee Referral vs. Job Board Hires: Quality & Retention Stats",
       "summary": "Referral hires are often associated with 12–25% better retention and performance outcomes versus cold job-board hires.",
       "categories": [
         "hr"
@@ -714,7 +714,7 @@
       "id": "checkout-field-reduction_en",
       "slug": "checkout-field-reduction",
       "lang": "en",
-      "title": "How much can reducing checkout fields improve conversion?",
+      "title": "How Reducing Checkout Fields Boosts Conversion (by 20-60%)",
       "summary": "Large-scale checkout research suggests trimming excessive form fields can lift conversion by roughly 20–60%, depending on baseline friction.",
       "categories": [
         "ux",
@@ -1117,7 +1117,7 @@
       "id": "image-count-product-page_en",
       "slug": "image-count-product-page",
       "lang": "en",
-      "title": "Does adding more product images increase add-to-cart rate?",
+      "title": "How Product Image Count Impacts Add-to-Cart Rates",
       "summary": "Richer product image galleries are commonly associated with a 6–18% relative lift in add-to-cart on PDPs.",
       "categories": [
         "ux",
