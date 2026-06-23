@@ -137,7 +137,7 @@ def _category_sections(items, limit=None):
         if not key or key == 'all':
             continue
         matched = [i for i in items if _insight_matches_theme(i, key, mapping)]
-        matched.sort(key=lambda x: x.get('published', ''), reverse=True)
+        matched.sort(key=lambda x: (x.get('published', ''), x.get('id', '')), reverse=True)
         if matched:
             insights = []
             for item in matched[:limit]:
@@ -307,6 +307,7 @@ def category_page(theme):
     items = CACHED_DATA.get(DATA_KEY, [])
     mapping = SITE_CONFIG.get('js_category_map', {})
     insights = [i for i in items if _insight_matches_theme(i, theme, mapping)]
+    insights.sort(key=lambda x: (x.get('published', ''), x.get('id', '')), reverse=True)
     stats = _get_footer_stats()
     canonical = f"{SITE_CONFIG['site_url'].rstrip('/')}/category/{theme}"
     return render_template(

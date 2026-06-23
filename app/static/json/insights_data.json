@@ -378,29 +378,6 @@
       "link": "/insight/travel-insurance-claim-value_en"
     },
     {
-      "id": "shoulder-season-travel-cost_en",
-      "slug": "shoulder-season-travel-cost",
-      "lang": "en",
-      "title": "How much cheaper is shoulder-season travel?",
-      "summary": "Shoulder-season trips are often 15–35% cheaper than peak-week equivalents for the same destinations.",
-      "categories": [
-        "travel"
-      ],
-      "intervention": "Travel in shoulder season vs peak holiday week",
-      "outcome": "Total trip cost (lodging + flights)",
-      "effect_label": "-15–35%",
-      "effect_min": 15,
-      "effect_max": 35,
-      "effect_unit": "percent_relative",
-      "effect_direction": "decrease",
-      "sample_context": "European city breaks and US national parks, 2022–2025",
-      "confidence": "estimate",
-      "hook": "Peak season sells weather; shoulder season sells sanity.",
-      "thumbnail": "/static/images/shoulder-season-travel-cost.jpg",
-      "published": "2026-06-01",
-      "link": "/insight/shoulder-season-travel-cost_en"
-    },
-    {
       "id": "signup-one-fewer-step_en",
       "slug": "signup-one-fewer-step",
       "lang": "en",
@@ -425,6 +402,29 @@
       "thumbnail": "/static/images/signup-one-fewer-step.jpg",
       "published": "2026-06-01",
       "link": "/insight/signup-one-fewer-step_en"
+    },
+    {
+      "id": "shoulder-season-travel-cost_en",
+      "slug": "shoulder-season-travel-cost",
+      "lang": "en",
+      "title": "How much cheaper is shoulder-season travel?",
+      "summary": "Shoulder-season trips are often 15–35% cheaper than peak-week equivalents for the same destinations.",
+      "categories": [
+        "travel"
+      ],
+      "intervention": "Travel in shoulder season vs peak holiday week",
+      "outcome": "Total trip cost (lodging + flights)",
+      "effect_label": "-15–35%",
+      "effect_min": 15,
+      "effect_max": 35,
+      "effect_unit": "percent_relative",
+      "effect_direction": "decrease",
+      "sample_context": "European city breaks and US national parks, 2022–2025",
+      "confidence": "estimate",
+      "hook": "Peak season sells weather; shoulder season sells sanity.",
+      "thumbnail": "/static/images/shoulder-season-travel-cost.jpg",
+      "published": "2026-06-01",
+      "link": "/insight/shoulder-season-travel-cost_en"
     },
     {
       "id": "flight-booking-lead-time_en",
@@ -498,29 +498,6 @@
       "link": "/insight/employee-referral-quality_en"
     },
     {
-      "id": "salary-range-job-posting_en",
-      "slug": "salary-range-job-posting",
-      "lang": "en",
-      "title": "Does listing salary ranges increase qualified applicants?",
-      "summary": "Visible salary bands are commonly associated with a 15–30% relative increase in qualified applicants per role.",
-      "categories": [
-        "hr"
-      ],
-      "intervention": "Publish salary band on public job postings",
-      "outcome": "Qualified applicants per opening",
-      "effect_label": "+15–30%",
-      "effect_min": 15,
-      "effect_max": 30,
-      "effect_unit": "percent_relative",
-      "effect_direction": "increase",
-      "sample_context": "US job boards post-pay-transparency laws, 2023–2025",
-      "confidence": "study",
-      "hook": "Mystery pay ranges filter out your best candidates first.",
-      "thumbnail": "/static/images/salary-range-job-posting.jpg",
-      "published": "2026-05-28",
-      "link": "/insight/salary-range-job-posting_en"
-    },
-    {
       "id": "social-login-signup_en",
       "slug": "social-login-signup",
       "lang": "en",
@@ -545,6 +522,29 @@
       "thumbnail": "/static/images/social-login-signup.jpg",
       "published": "2026-05-28",
       "link": "/insight/social-login-signup_en"
+    },
+    {
+      "id": "salary-range-job-posting_en",
+      "slug": "salary-range-job-posting",
+      "lang": "en",
+      "title": "Does listing salary ranges increase qualified applicants?",
+      "summary": "Visible salary bands are commonly associated with a 15–30% relative increase in qualified applicants per role.",
+      "categories": [
+        "hr"
+      ],
+      "intervention": "Publish salary band on public job postings",
+      "outcome": "Qualified applicants per opening",
+      "effect_label": "+15–30%",
+      "effect_min": 15,
+      "effect_max": 30,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "US job boards post-pay-transparency laws, 2023–2025",
+      "confidence": "study",
+      "hook": "Mystery pay ranges filter out your best candidates first.",
+      "thumbnail": "/static/images/salary-range-job-posting.jpg",
+      "published": "2026-05-28",
+      "link": "/insight/salary-range-job-posting_en"
     },
     {
       "id": "manager-1on1-frequency_en",
@@ -711,6 +711,29 @@
       "link": "/insight/cold-butter-pastry_en"
     },
     {
+      "id": "steak-rest-time_en",
+      "slug": "steak-rest-time",
+      "lang": "en",
+      "title": "How much does resting steak improve perceived juiciness?",
+      "summary": "Resting steak several minutes before slicing is commonly associated with 15–30% higher juiciness ratings in panel tests.",
+      "categories": [
+        "food"
+      ],
+      "intervention": "Rest cooked steak 5–10 minutes before slicing vs cutting immediately",
+      "outcome": "Perceived juiciness rating",
+      "effect_label": "+15–30%",
+      "effect_min": 15,
+      "effect_max": 30,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Home grilling, 1–1.5 inch steaks, consumer panels",
+      "confidence": "study",
+      "hook": "Patience is the cheapest ingredient in the kitchen.",
+      "thumbnail": "/static/images/steak-rest-time.jpg",
+      "published": "2026-05-20",
+      "link": "/insight/steak-rest-time_en"
+    },
+    {
       "id": "checkout-field-reduction_en",
       "slug": "checkout-field-reduction",
       "lang": "en",
@@ -734,29 +757,6 @@
       "thumbnail": "/static/images/checkout-field-reduction.jpg",
       "published": "2026-05-20",
       "link": "/insight/checkout-field-reduction_en"
-    },
-    {
-      "id": "steak-rest-time_en",
-      "slug": "steak-rest-time",
-      "lang": "en",
-      "title": "How much does resting steak improve perceived juiciness?",
-      "summary": "Resting steak several minutes before slicing is commonly associated with 15–30% higher juiciness ratings in panel tests.",
-      "categories": [
-        "food"
-      ],
-      "intervention": "Rest cooked steak 5–10 minutes before slicing vs cutting immediately",
-      "outcome": "Perceived juiciness rating",
-      "effect_label": "+15–30%",
-      "effect_min": 15,
-      "effect_max": 30,
-      "effect_unit": "percent_relative",
-      "effect_direction": "increase",
-      "sample_context": "Home grilling, 1–1.5 inch steaks, consumer panels",
-      "confidence": "study",
-      "hook": "Patience is the cheapest ingredient in the kitchen.",
-      "thumbnail": "/static/images/steak-rest-time.jpg",
-      "published": "2026-05-20",
-      "link": "/insight/steak-rest-time_en"
     },
     {
       "id": "pasta-salt-water_en",
@@ -852,30 +852,6 @@
       "link": "/insight/matchmaking-queue-time_en"
     },
     {
-      "id": "baseball-short-swing_en",
-      "slug": "baseball-short-swing",
-      "lang": "en",
-      "title": "Does a shorter swing path improve contact in MLB?",
-      "summary": "Shorter swings correlate with higher batting average (.258 vs .235) and lower whiff rate (19% vs 30%), but lower slugging (.359 vs .422).",
-      "categories": [
-        "sports",
-        "baseball"
-      ],
-      "intervention": "Use a shorter-than-average swing path (Statcast swing length)",
-      "outcome": "Batting average and whiff rate",
-      "effect_label": "+2.3–11%",
-      "effect_min": 2.3,
-      "effect_max": 11,
-      "effect_unit": "percent_point",
-      "effect_direction": "mixed",
-      "sample_context": "MLB Statcast bat-tracking, early 2024 season splits",
-      "confidence": "study",
-      "hook": "Want more hits? Shorten the swing. Want more homers? That's a different contract.",
-      "thumbnail": "/static/images/baseball-short-swing.jpg",
-      "published": "2026-05-15",
-      "link": "/insight/baseball-short-swing_en"
-    },
-    {
       "id": "battle-pass-completion_en",
       "slug": "battle-pass-completion",
       "lang": "en",
@@ -898,6 +874,30 @@
       "thumbnail": "/static/images/battle-pass-completion.jpg",
       "published": "2026-05-15",
       "link": "/insight/battle-pass-completion_en"
+    },
+    {
+      "id": "baseball-short-swing_en",
+      "slug": "baseball-short-swing",
+      "lang": "en",
+      "title": "Does a shorter swing path improve contact in MLB?",
+      "summary": "Shorter swings correlate with higher batting average (.258 vs .235) and lower whiff rate (19% vs 30%), but lower slugging (.359 vs .422).",
+      "categories": [
+        "sports",
+        "baseball"
+      ],
+      "intervention": "Use a shorter-than-average swing path (Statcast swing length)",
+      "outcome": "Batting average and whiff rate",
+      "effect_label": "+2.3–11%",
+      "effect_min": 2.3,
+      "effect_max": 11,
+      "effect_unit": "percent_point",
+      "effect_direction": "mixed",
+      "sample_context": "MLB Statcast bat-tracking, early 2024 season splits",
+      "confidence": "study",
+      "hook": "Want more hits? Shorten the swing. Want more homers? That's a different contract.",
+      "thumbnail": "/static/images/baseball-short-swing.jpg",
+      "published": "2026-05-15",
+      "link": "/insight/baseball-short-swing_en"
     },
     {
       "id": "daily-login-streak_en",
@@ -994,30 +994,6 @@
       "link": "/insight/referral-bonus-size_en"
     },
     {
-      "id": "cart-abandonment-email-timing_en",
-      "slug": "cart-abandonment-email-timing",
-      "lang": "en",
-      "title": "When should cart abandonment emails go out?",
-      "summary": "Earlier abandonment emails (within ~1 hour) are often associated with 20–45% higher recovery revenue versus waiting 24 hours.",
-      "categories": [
-        "business",
-        "checkout"
-      ],
-      "intervention": "Send first cart recovery email within 1 hour vs 24 hours",
-      "outcome": "Recovered cart revenue per abandoned cart",
-      "effect_label": "+20–45%",
-      "effect_min": 20,
-      "effect_max": 45,
-      "effect_unit": "percent_relative",
-      "effect_direction": "increase",
-      "sample_context": "E-commerce email programs, opt-in shoppers, 2022–2025",
-      "confidence": "study",
-      "hook": "The cart is still warm an hour later—ice cold tomorrow.",
-      "thumbnail": "/static/images/cart-abandonment-email-timing.jpg",
-      "published": "2026-05-10",
-      "link": "/insight/cart-abandonment-email-timing_en"
-    },
-    {
       "id": "page-speed-bounce_en",
       "slug": "page-speed-bounce",
       "lang": "en",
@@ -1040,6 +1016,30 @@
       "thumbnail": "/static/images/page-speed-bounce.jpg",
       "published": "2026-05-10",
       "link": "/insight/page-speed-bounce_en"
+    },
+    {
+      "id": "cart-abandonment-email-timing_en",
+      "slug": "cart-abandonment-email-timing",
+      "lang": "en",
+      "title": "When should cart abandonment emails go out?",
+      "summary": "Earlier abandonment emails (within ~1 hour) are often associated with 20–45% higher recovery revenue versus waiting 24 hours.",
+      "categories": [
+        "business",
+        "checkout"
+      ],
+      "intervention": "Send first cart recovery email within 1 hour vs 24 hours",
+      "outcome": "Recovered cart revenue per abandoned cart",
+      "effect_label": "+20–45%",
+      "effect_min": 20,
+      "effect_max": 45,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "E-commerce email programs, opt-in shoppers, 2022–2025",
+      "confidence": "study",
+      "hook": "The cart is still warm an hour later—ice cold tomorrow.",
+      "thumbnail": "/static/images/cart-abandonment-email-timing.jpg",
+      "published": "2026-05-10",
+      "link": "/insight/cart-abandonment-email-timing_en"
     },
     {
       "id": "annual-billing-default_en",
@@ -1139,30 +1139,6 @@
       "link": "/insight/image-count-product-page_en"
     },
     {
-      "id": "above-fold-value-prop_en",
-      "slug": "above-fold-value-prop",
-      "lang": "en",
-      "title": "How much does clarifying the above-fold value prop affect bounce rate?",
-      "summary": "Clearer above-fold value propositions are often linked to a 7–14% relative drop in bounce on paid landing pages.",
-      "categories": [
-        "ux",
-        "business"
-      ],
-      "intervention": "Rewrite hero headline and subhead to state outcome in under 10 words",
-      "outcome": "Bounce rate on landing pages",
-      "effect_label": "-7–14%",
-      "effect_min": 7,
-      "effect_max": 14,
-      "effect_unit": "percent_relative",
-      "effect_direction": "decrease",
-      "sample_context": "Paid traffic landing pages, B2B and consumer, 2023–2025",
-      "confidence": "ab_test",
-      "hook": "Visitors decide in seconds—your headline is the whole pitch.",
-      "thumbnail": "/static/images/above-fold-value-prop.jpg",
-      "published": "2026-05-05",
-      "link": "/insight/above-fold-value-prop_en"
-    },
-    {
       "id": "sleep-productivity_en",
       "slug": "sleep-productivity",
       "lang": "en",
@@ -1185,6 +1161,30 @@
       "thumbnail": "/static/images/sleep-productivity.jpg",
       "published": "2026-05-05",
       "link": "/insight/sleep-productivity_en"
+    },
+    {
+      "id": "above-fold-value-prop_en",
+      "slug": "above-fold-value-prop",
+      "lang": "en",
+      "title": "How much does clarifying the above-fold value prop affect bounce rate?",
+      "summary": "Clearer above-fold value propositions are often linked to a 7–14% relative drop in bounce on paid landing pages.",
+      "categories": [
+        "ux",
+        "business"
+      ],
+      "intervention": "Rewrite hero headline and subhead to state outcome in under 10 words",
+      "outcome": "Bounce rate on landing pages",
+      "effect_label": "-7–14%",
+      "effect_min": 7,
+      "effect_max": 14,
+      "effect_unit": "percent_relative",
+      "effect_direction": "decrease",
+      "sample_context": "Paid traffic landing pages, B2B and consumer, 2023–2025",
+      "confidence": "ab_test",
+      "hook": "Visitors decide in seconds—your headline is the whole pitch.",
+      "thumbnail": "/static/images/above-fold-value-prop.jpg",
+      "published": "2026-05-05",
+      "link": "/insight/above-fold-value-prop_en"
     },
     {
       "id": "error-message-specificity_en",

@@ -138,7 +138,7 @@ def main():
         except Exception as e:
             print(f"❌ Skip {filename}: {e}")
 
-    insights.sort(key=lambda x: x['published'], reverse=True)
+    insights.sort(key=lambda x: (x['published'], x['id']), reverse=True)
 
     output = {
         "last_updated": datetime.now().strftime("%Y.%m.%d"),

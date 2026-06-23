@@ -31,6 +31,15 @@ function itemMatchesTheme(item, themeKey) {
     );
 }
 
+function sortByPublishedDesc(items) {
+    return items.slice().sort((a, b) => {
+        const da = String(a.published || '').slice(0, 10);
+        const db = String(b.published || '').slice(0, 10);
+        if (da !== db) return db.localeCompare(da);
+        return String(a.id || '').localeCompare(String(b.id || ''));
+    });
+}
+
 function getFilteredData() {
     const q = searchQuery.trim().toLowerCase();
     const searchActive = Boolean(q);
@@ -54,6 +63,7 @@ function getFilteredData() {
 
         return haystack.includes(q);
     });
+    return sortByPublishedDesc(filtered);
 }
 
 function setSearchMode(active) {
@@ -124,7 +134,7 @@ function renderInsights(data) {
     const homeLimit = getHomeLimit();
     const sections = CATEGORY_ORDER
         .map(key => {
-            const all = data.filter(item => itemMatchesTheme(item, key));
+            const all = sortByPublishedDesc(data.filter(item => itemMatchesTheme(item, key)));
             return {
                 key,
                 label: CATEGORY_MAP[key],
