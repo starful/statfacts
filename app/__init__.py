@@ -22,9 +22,9 @@ except ImportError:
     from card_renderer import render_insight_card, OG_SIZE, LIST_SIZE
 
 try:
-    from .content_new import enrich_items
+    from .content_new import enrich_items, enrich_item
 except ImportError:
-    from content_new import enrich_items
+    from content_new import enrich_items, enrich_item
 
 BASE_DIR    = app.root_path
 STATIC_DIR  = os.path.join(BASE_DIR, 'static')
@@ -136,7 +136,6 @@ def _category_sections(items, limit=None):
     if limit is None:
         limit = int(SITE_CONFIG.get('homepage_category_limit', 6))
     sections = []
-    cutoff = (date.today() - timedelta(days=14)).isoformat()
     for btn in SITE_CONFIG.get('filter_buttons', []):
         key = btn.get('theme')
         if not key or key == 'all':
@@ -144,30 +143,19 @@ def _category_sections(items, limit=None):
         matched = [i for i in items if _insight_matches_theme(i, key, mapping)]
         matched.sort(key=lambda x: (x.get('published', ''), x.get('id', '')), reverse=True)
         if matched:
-            insights = []
-            for item in matched[:limit]:
-                row = copy.deepcopy(item)
-                row['is_new'] = (row.get('published') or '') >= cutoff
-                insights.append(row)
             sections.append({
                 'theme': key,
                 'label': btn.get('label', key),
-                'insights': insights,
+                'insights': enrich_items(matched[:limit]),
                 'total': len(matched),
             })
     return sections
 
 
-def _latest_insights(items, limit=None, new_days=14):
+def _latest_insights(items, limit=None):
     if limit is None:
         limit = int(SITE_CONFIG.get('homepage_latest_limit', 6))
-    cutoff = (date.today() - timedelta(days=new_days)).isoformat()
-    out = []
-    for item in items[:limit]:
-        row = copy.deepcopy(item)
-        row['is_new'] = (row.get('published') or '') >= cutoff
-        out.append(row)
-    return out
+    return enrich_items(items[:limit])
 
 
 def _featured_category_lookup():

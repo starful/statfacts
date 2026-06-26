@@ -67,17 +67,28 @@ def _format_effect(post) -> str:
 
 
 def _normalize_published(raw: str, fpath: str) -> str:
-    """Return valid YYYY-MM-DD; fall back to file mtime if frontmatter is invalid."""
+    """Return YYYY-MM-DD for sort/NEW badge: max(frontmatter date, file mtime)."""
+    fm_date: date | None = None
     s = str(raw or "").strip()[:10]
     if s:
         try:
-            return date.fromisoformat(s).isoformat()
+            fm_date = date.fromisoformat(s)
         except ValueError:
-            pass
+            fm_date = None
+
+    mtime_date: date | None = None
     try:
-        return datetime.fromtimestamp(os.path.getmtime(fpath)).strftime("%Y-%m-%d")
+        mtime_date = datetime.fromtimestamp(os.path.getmtime(fpath)).date()
     except OSError:
-        return datetime.now().strftime("%Y-%m-%d")
+        mtime_date = None
+
+    if fm_date and mtime_date:
+        return max(fm_date, mtime_date).isoformat()
+    if fm_date:
+        return fm_date.isoformat()
+    if mtime_date:
+        return mtime_date.isoformat()
+    return date.today().isoformat()
 
 
 def main():
