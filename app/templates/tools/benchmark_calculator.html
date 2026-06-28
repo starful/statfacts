@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmark Calculator — {{ site.site_name }}</title>
+    <meta name="description" content="Apply StatFacts effect-size ranges to your baseline and estimate A/B test sample size.">
+    <link rel="canonical" href="{{ canonical }}" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Benchmark Calculator — {{ site.site_name }}">
+    <meta property="og:description" content="Apply effect-size ranges to your baseline and estimate A/B test sample size.">
+    <meta property="og:url" content="{{ canonical }}">
+    <meta property="og:image" content="{{ site.site_url }}{{ site.logo_url }}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Benchmark Calculator — {{ site.site_name }}">
+    {% include '_head_icons.html' %}
+    {% include '_ga.html' %}
+    <link rel="stylesheet" href="/static/css/style.css?v={{ site.asset_version }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="tool-page">
+        <div class="content-wrapper">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="/">Home</a>
+                <span aria-hidden="true">/</span>
+                <span>Tools</span>
+            </nav>
+
+            <div class="tool-header">
+                <h1 class="tool-title">Benchmark calculator</h1>
+                <p class="tool-lead">
+                    Turn a StatFacts range into projected rates and a rough A/B test sample size.
+                    See our <a href="/guide/planning-ab-test-from-benchmark">planning guide</a> for context.
+                </p>
+            </div>
+
+            <div id="source-card" class="tool-source-card" hidden>
+                <span class="tool-source-label">From insight</span>
+                <strong id="source-title"></strong>
+                <a id="source-link" href="#" class="tool-source-link">View insight →</a>
+            </div>
+
+            <div class="tool-tabs" role="tablist" aria-label="Calculator sections">
+                <button type="button" class="tool-tab active" data-tab="apply" role="tab" aria-selected="true">
+                    Apply benchmark
+                </button>
+                <button type="button" class="tool-tab" data-tab="sample-size" role="tab" aria-selected="false">
+                    A/B sample size
+                </button>
+            </div>
+
+            <section id="panel-apply" class="tool-panel" role="tabpanel">
+                <form class="tool-form" onsubmit="return false;">
+                    <div class="tool-field">
+                        <label for="apply-baseline">Your current baseline (%)</label>
+                        <input type="number" id="apply-baseline" min="0.01" max="99.99" step="0.01" value="20">
+                    </div>
+                    <div class="tool-field-row">
+                        <div class="tool-field">
+                            <label for="apply-min">Benchmark min</label>
+                            <input type="number" id="apply-min" min="0" step="0.01" value="12">
+                        </div>
+                        <div class="tool-field">
+                            <label for="apply-max">Benchmark max</label>
+                            <input type="number" id="apply-max" min="0" step="0.01" value="18">
+                        </div>
+                    </div>
+                    <div class="tool-field-row">
+                        <div class="tool-field">
+                            <label for="apply-unit">Effect unit</label>
+                            <select id="apply-unit">
+                                <option value="percent_relative">Relative % (e.g. +12–18%)</option>
+                                <option value="percent_point">Percentage points (e.g. +8 pp)</option>
+                            </select>
+                        </div>
+                        <div class="tool-field">
+                            <label for="apply-direction">Direction</label>
+                            <select id="apply-direction">
+                                <option value="increase">Increase</option>
+                                <option value="decrease">Decrease</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="apply-results" class="tool-results" aria-live="polite">
+                    <h2 class="tool-results-title">Projected outcome</h2>
+                    <div class="tool-result-grid">
+                        <div class="tool-result-card tool-result-card--primary">
+                            <span class="tool-result-label">New rate range</span>
+                            <span class="tool-result-value" id="result-range">—</span>
+                        </div>
+                        <div class="tool-result-card">
+                            <span class="tool-result-label">Absolute change</span>
+                            <span class="tool-result-value" id="result-abs">—</span>
+                        </div>
+                        <div class="tool-result-card">
+                            <span class="tool-result-label">Midpoint</span>
+                            <span class="tool-result-value" id="result-mid">—</span>
+                        </div>
+                    </div>
+                    <div class="tool-suggest-row">
+                        <span class="tool-suggest-label">Use midpoint as test MDE →</span>
+                        <button type="button" class="tool-suggest-btn" id="btn-use-mde-pp">Absolute pp</button>
+                        <button type="button" class="tool-suggest-btn" id="btn-use-mde-rel">Relative %</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="panel-sample-size" class="tool-panel" role="tabpanel" hidden>
+                <form class="tool-form" onsubmit="return false;">
+                    <div class="tool-field">
+                        <label for="size-baseline">Baseline conversion (%)</label>
+                        <input type="number" id="size-baseline" min="0.01" max="99.99" step="0.01" value="20">
+                    </div>
+                    <div class="tool-field-row">
+                        <div class="tool-field">
+                            <label for="size-mde">Minimum detectable effect (MDE)</label>
+                            <input type="number" id="size-mde" min="0.01" step="0.01" value="1">
+                        </div>
+                        <div class="tool-field">
+                            <label for="size-mde-mode">MDE type</label>
+                            <select id="size-mde-mode">
+                                <option value="absolute_pp">Absolute percentage points</option>
+                                <option value="relative_pct">Relative % lift on baseline</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tool-field-row">
+                        <div class="tool-field">
+                            <label for="size-alpha">Significance (α)</label>
+                            <select id="size-alpha">
+                                <option value="0.10">90% confidence (α = 0.10)</option>
+                                <option value="0.05" selected>95% confidence (α = 0.05)</option>
+                                <option value="0.01">99% confidence (α = 0.01)</option>
+                            </select>
+                        </div>
+                        <div class="tool-field">
+                            <label for="size-power">Power (1 − β)</label>
+                            <select id="size-power">
+                                <option value="0.80" selected>80%</option>
+                                <option value="0.90">90%</option>
+                                <option value="0.95">95%</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tool-field-row">
+                        <div class="tool-field">
+                            <label for="size-direction">Expected direction</label>
+                            <select id="size-direction">
+                                <option value="increase">Increase vs control</option>
+                                <option value="decrease">Decrease vs control</option>
+                            </select>
+                        </div>
+                        <div class="tool-field">
+                            <label for="size-weekly">Weekly traffic (optional)</label>
+                            <input type="number" id="size-weekly" min="0" step="100" placeholder="e.g. 10000">
+                        </div>
+                    </div>
+                </form>
+
+                <p id="size-error" class="tool-error" hidden></p>
+
+                <div id="size-results" class="tool-results">
+                    <h2 class="tool-results-title">Sample size (2 variants)</h2>
+                    <div class="tool-result-grid">
+                        <div class="tool-result-card tool-result-card--primary">
+                            <span class="tool-result-label">Per variant</span>
+                            <span class="tool-result-value" id="size-per-variant">—</span>
+                        </div>
+                        <div class="tool-result-card">
+                            <span class="tool-result-label">Total visitors</span>
+                            <span class="tool-result-value" id="size-total">—</span>
+                        </div>
+                        <div class="tool-result-card">
+                            <span class="tool-result-label">Treatment rate at MDE</span>
+                            <span class="tool-result-value" id="size-treatment-rate">—</span>
+                        </div>
+                    </div>
+                    <p id="size-duration" class="tool-duration" hidden></p>
+                </div>
+            </section>
+
+            <p class="tool-disclaimer">
+                Planning input only—not a forecast. Benchmarks set ambition; your context and power analysis set feasibility.
+                Always check <code>sample_context</code> on the source insight before citing numbers.
+            </p>
+
+            <div class="page-nav-actions">
+                <a href="/guide/planning-ab-test-from-benchmark" class="back-btn back-btn-secondary">📖 Planning guide</a>
+                <a href="/guide/relative-vs-absolute-effects" class="back-btn back-btn-secondary">Relative vs absolute</a>
+                <a href="/" class="back-btn">← Explore insights</a>
+            </div>
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+    <script src="/static/js/benchmark_calculator.js?v={{ site.asset_version }}"></script>
+</body>
+</html>

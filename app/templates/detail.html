@@ -88,6 +88,15 @@
             {% endif %}
         </section>
 
+        {% if calculator_url %}
+        <div class="tool-cta-bar">
+            <a href="{{ calculator_url }}" class="tool-cta-btn">
+                📐 Plan with this benchmark
+            </a>
+            <span class="tool-cta-hint">Apply the range to your baseline or size an A/B test</span>
+        </div>
+        {% endif %}
+
         <div class="detail-content">
             {{ content | safe }}
         </div>

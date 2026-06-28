@@ -165,6 +165,41 @@ def _insight_matches_theme(item, theme_key, mapping):
     return any(c.lower() == theme_key or c == mapped for c in cats)
 
 
+def _normalize_sitemap_date(raw: str | None, *, fallback: str | None = None) -> str:
+    """Normalize published / last_updated to YYYY-MM-DD for sitemap lastmod."""
+    if not raw:
+        return fallback or date.today().isoformat()
+    s = str(raw).strip()
+    if re.match(r'^\d{4}\.\d{2}\.\d{2}', s):
+        y, m, d = s[:10].split('.')
+        return f"{y}-{m}-{d}"
+    s = s[:10]
+    try:
+        return date.fromisoformat(s).isoformat()
+    except ValueError:
+        return fallback or date.today().isoformat()
+
+
+def _file_lastmod(path: str) -> str:
+    try:
+        return datetime.fromtimestamp(os.path.getmtime(path)).strftime('%Y-%m-%d')
+    except OSError:
+        return date.today().isoformat()
+
+
+def _max_published(items: list[dict], *, key: str = 'published') -> str | None:
+    dates = [_normalize_sitemap_date(i.get(key)) for i in items if i.get(key)]
+    return max(dates) if dates else None
+
+
+def _sitemap_url(loc: str, lastmod: str, changefreq: str) -> str:
+    return (
+        f"<url><loc>{loc}</loc>"
+        f"<lastmod>{lastmod}</lastmod>"
+        f"<changefreq>{changefreq}</changefreq></url>"
+    )
+
+
 def _category_sections(items, limit=None):
     mapping = SITE_CONFIG.get('js_category_map', {})
     if limit is None:
@@ -436,6 +471,34 @@ def demo_cards():
     return render_template('demo_cards.html', samples=samples, **_get_footer_stats())
 
 
+def _benchmark_calculator_url(post: dict) -> str | None:
+    """Build deep-link query for /tools/benchmark-calculator from insight frontmatter."""
+    lo, hi = post.get('effect_min'), post.get('effect_max')
+    if lo is None and hi is None:
+        return None
+    from urllib.parse import urlencode
+
+    params = {
+        'from': str(post.get('id', '')),
+        'title': str(post.get('title', '')),
+        'min': lo if lo is not None else hi,
+        'max': hi if hi is not None else lo,
+        'unit': str(post.get('effect_unit', 'percent_relative')),
+        'direction': str(post.get('effect_direction', 'increase')),
+    }
+    return '/tools/benchmark-calculator?' + urlencode(params)
+
+
+@app.route('/tools/benchmark-calculator')
+def benchmark_calculator():
+    stats = _get_footer_stats()
+    return render_template(
+        'tools/benchmark_calculator.html',
+        canonical=f"{SITE_CONFIG['site_url'].rstrip('/')}/tools/benchmark-calculator",
+        **stats,
+    )
+
+
 @app.route('/guide')
 def guide_list():
     stats = _get_footer_stats()
@@ -532,6 +595,8 @@ def insight_detail(insight_id):
     share_text = f"{post['hook']} → {post['effect_display']}"
     og_image_abs = _social_image_url(slug)
 
+    calculator_url = _benchmark_calculator_url(post)
+
     return render_template(
         'detail.html',
         post=post,
@@ -549,6 +614,7 @@ def insight_detail(insight_id):
         share_text=share_text,
         share_tweet=share_text,
         linkedin_inspector_url=_linkedin_inspector_url(share_url),
+        calculator_url=calculator_url,
         **stats,
     )
 
@@ -613,34 +679,55 @@ def robots_txt():
 
 @app.route('/sitemap.xml')
 def sitemap_xml():
+    _ensure_insights_cache()
     base = SITE_CONFIG['site_url'].rstrip('/')
-    today = datetime.now().strftime('%Y-%m-%d')
-    nodes = []
+    items = CACHED_DATA.get(DATA_KEY, [])
+    mapping = SITE_CONFIG.get('js_category_map', {})
+    guides = CACHED_GUIDES.get('en', [])
 
-    for url in [f"{base}/", f"{base}/guide", f"{base}/about.html", f"{base}/privacy.html"]:
-        nodes.append(f"<url><loc>{url}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq></url>")
+    insight_dates = [_normalize_sitemap_date(i.get('published')) for i in items if i.get('published')]
+    home_lastmod = (
+        max(insight_dates)
+        if insight_dates
+        else _normalize_sitemap_date(CACHED_DATA.get('last_updated'))
+    )
+    guide_lastmod = _max_published(guides) or home_lastmod
+
+    templates_dir = os.path.join(BASE_DIR, 'templates')
+    about_lastmod = _file_lastmod(os.path.join(templates_dir, 'about.html'))
+    privacy_lastmod = _file_lastmod(os.path.join(templates_dir, 'privacy.html'))
+
+    tool_lastmod = _file_lastmod(os.path.join(templates_dir, 'tools', 'benchmark_calculator.html'))
+
+    nodes: list[str] = [
+        _sitemap_url(f"{base}/", home_lastmod, 'weekly'),
+        _sitemap_url(f"{base}/guide", guide_lastmod, 'weekly'),
+        _sitemap_url(f"{base}/tools/benchmark-calculator", tool_lastmod, 'monthly'),
+        _sitemap_url(f"{base}/about.html", about_lastmod, 'monthly'),
+        _sitemap_url(f"{base}/privacy.html", privacy_lastmod, 'monthly'),
+    ]
 
     for cat in SITE_CONFIG.get('featured_categories', []):
         theme = cat.get('theme')
-        if theme:
-            nodes.append(
-                f"<url><loc>{base}/category/{theme}</loc>"
-                f"<lastmod>{today}</lastmod><changefreq>weekly</changefreq></url>"
-            )
+        if not theme:
+            continue
+        matched = [i for i in items if _insight_matches_theme(i, theme, mapping)]
+        cat_lastmod = _max_published(matched) or home_lastmod
+        nodes.append(_sitemap_url(f"{base}/category/{theme}", cat_lastmod, 'weekly'))
 
-    for item in CACHED_DATA.get(DATA_KEY, []):
+    for item in items:
         link = item.get('link', '')
-        if link:
-            nodes.append(
-                f"<url><loc>{base}{link}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq></url>"
-            )
+        if not link:
+            continue
+        pub = _normalize_sitemap_date(item.get('published'), fallback=home_lastmod)
+        nodes.append(_sitemap_url(f"{base}{link}", pub, 'monthly'))
 
-    for guide in CACHED_GUIDES.get('en', []):
+    for guide in guides:
         gid = guide.get('id')
-        if gid:
-            nodes.append(
-                f"<url><loc>{base}/guide/{gid}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq></url>"
-            )
+        if not gid:
+            continue
+        pub = _normalize_sitemap_date(guide.get('published'), fallback=guide_lastmod)
+        nodes.append(_sitemap_url(f"{base}/guide/{gid}", pub, 'monthly'))
 
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>'

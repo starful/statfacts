@@ -1,4 +1,8 @@
+import json
+import re
 import unittest
+from datetime import date
+from pathlib import Path
 
 from app import app
 
@@ -50,6 +54,20 @@ class ApiSmokeTest(unittest.TestCase):
         self.assertIn("<urlset", body)
         self.assertIn("<loc>", body)
         self.assertIn("/insight/", body)
+        self.assertIn("<lastmod>", body)
+        lastmods = re.findall(r"<lastmod>([^<]+)</lastmod>", body)
+        self.assertGreater(len(set(lastmods)), 1)
+
+    def test_sitemap_insight_lastmod_matches_published(self):
+        data_path = Path(__file__).resolve().parents[1] / "app/static/json/insights_data.json"
+        payload = json.loads(data_path.read_text(encoding="utf-8"))
+        sample = next(i for i in payload["insights"] if i.get("published"))
+        insight_id = sample["id"]
+        expected = sample["published"][:10]
+
+        body = self.client.get("/sitemap.xml").get_data(as_text=True)
+        pattern = rf"<loc>[^<]*/insight/{re.escape(insight_id)}</loc><lastmod>{expected}</lastmod>"
+        self.assertRegex(body, pattern)
 
     def test_social_image_route(self):
         resp = self.client.get("/social/signup-one-fewer-step.jpg")
