@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from md_clean import clean_md
 from resolve_secrets import ensure_gemini_api_key
 
 ensure_gemini_api_key()
@@ -20,15 +21,6 @@ SCRIPT_DIR  = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR    = os.path.dirname(SCRIPT_DIR)
 CONTENT_DIR = os.path.join(BASE_DIR, 'app', 'content')
 IMAGES_DIR  = os.path.join(BASE_DIR, 'app', 'static', 'images')
-
-
-def clean_md(text: str) -> str:
-    text = text.strip()
-    text = re.sub(r'^```[a-z]*\n', '', text)
-    text = re.sub(r'\n```$', '', text)
-    if '---' in text and not text.startswith('---'):
-        text = '---' + text.split('---', 1)[1]
-    return text
 
 
 def generate_image(safe_name: str, prompt: str, *, force: bool = False) -> bool:

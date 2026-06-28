@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, abort, redirect, request, Response, send_from_directory
 from flask_compress import Compress
-import json, os, frontmatter, markdown, re, glob, hashlib, copy, urllib.request, io
+import json, os, sys, frontmatter, markdown, re, glob, hashlib, copy, urllib.request, io
 from datetime import datetime, date, timedelta
 from urllib.parse import quote
 
@@ -13,6 +13,11 @@ except ImportError:
     from reactions import reactions_bp
 
 app.register_blueprint(reactions_bp)
+
+_SCRIPT_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "script")
+if _SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, _SCRIPT_DIR)
+from md_clean import clean_md as _clean_md  # noqa: E402
 
 try:
     from .config import SITE_CONFIG
@@ -139,15 +144,6 @@ def load_guides():
 
     CACHED_GUIDES = {'en': guides}
     print(f"✅ Guides loaded: {len(guides)}")
-
-
-def _clean_md(text):
-    text = re.sub(r'^```[a-z]*\n', '', text)
-    text = re.sub(r'\n```$', '', text)
-    text = re.sub(r'^(##\s*)?yaml\n', '', text, flags=re.IGNORECASE)
-    if '---' in text and not text.startswith('---'):
-        text = '---' + text.split('---', 1)[1]
-    return text.strip()
 
 
 def _get_footer_stats():

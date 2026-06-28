@@ -9,6 +9,8 @@ import importlib.util
 import frontmatter
 from datetime import datetime, date
 
+from md_clean import clean_md
+
 BASE_DIR    = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT_DIR = os.path.join(BASE_DIR, 'app', 'content')
 IMAGES_DIR  = os.path.join(BASE_DIR, 'app', 'static', 'images')
@@ -30,16 +32,6 @@ def _load_data_key() -> str:
         return str(site_config.get("data_key", default_key))
     except Exception:
         return default_key
-
-
-def clean_md(text: str) -> str:
-    text = text.strip()
-    text = re.sub(r'^```[a-z]*\n', '', text)
-    text = re.sub(r'\n```$', '', text)
-    text = re.sub(r'^(##\s*)?yaml\n', '', text, flags=re.IGNORECASE)
-    if '---' in text and not text.startswith('---'):
-        text = '---' + text.split('---', 1)[1]
-    return text
 
 
 def _format_effect(post) -> str:

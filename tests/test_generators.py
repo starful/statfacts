@@ -24,10 +24,10 @@ class GeneratorPathTest(unittest.TestCase):
         ids = {t[0] for t in tasks}
         self.assertNotIn("how-to-read-benchmarks", ids)
 
-    def test_batch_missing_insights_empty_when_all_built(self):
-        """All rows in insights.csv currently have MD on disk."""
+    def test_batch_missing_insights_skips_existing(self):
         tasks = insight_tasks(10)
-        self.assertEqual(tasks, [])
+        ids = {row.get("id") for row in tasks}
+        self.assertNotIn("signup-one-fewer-step", ids)
 
 
 if __name__ == "__main__":

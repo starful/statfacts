@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from md_clean import clean_md
 from resolve_secrets import ensure_gemini_api_key
 
 MODEL = "gemini-2.5-flash"
@@ -25,13 +26,7 @@ GUIDE_DIR = os.path.join(BASE_DIR, "app", "content", "guides")
 
 
 def clean_ai_response(text: str) -> str:
-    text = text.strip()
-    text = re.sub(r"^```[a-z]*\n", "", text)
-    text = re.sub(r"\n```$", "", text)
-    text = re.sub(r"^(##\s*)?yaml\n", "", text, flags=re.IGNORECASE)
-    if "---" in text and not text.startswith("---"):
-        text = "---" + text.split("---", 1)[1]
-    return text.strip()
+    return clean_md(text)
 
 
 def _guide_exists(guide_id: str) -> bool:
