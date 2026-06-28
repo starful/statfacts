@@ -52,19 +52,53 @@ def get_mapped_image(base_id, override=None):
     return GUIDE_IMAGES[idx]
 
 
+def _thumbnail_cache_v(published_or_date: str | None) -> str:
+    v = str(published_or_date or "").strip()[:10]
+    return v if len(v) >= 8 else ""
+
+
+def _thumbnail_with_v(url: str, cache_v: str | None = None) -> str:
+    if not url:
+        return url
+    v = _thumbnail_cache_v(cache_v)
+    base = url.split("?", 1)[0]
+    return f"{base}?v={v}" if v else base
+
+
+def _public_insight(item: dict) -> dict:
+    out = copy.deepcopy(item)
+    out["thumbnail"] = _thumbnail_with_v(out.get("thumbnail", ""), out.get("published"))
+    return out
+
+
 CACHED_DATA   = {DATA_KEY: [], "last_updated": ""}
 CACHED_GUIDES = {'en': []}
+_CACHE_MTIME: float = 0.0
 
 
 def load_insights():
-    global CACHED_DATA
+    global CACHED_DATA, _CACHE_MTIME
     if os.path.exists(DATA_FILE):
         try:
             with open(DATA_FILE, 'r', encoding='utf-8') as f:
                 CACHED_DATA = json.load(f)
+            _CACHE_MTIME = os.path.getmtime(DATA_FILE)
             print(f"✅ Data loaded: {len(CACHED_DATA.get(DATA_KEY, []))} insights")
         except Exception as e:
             print(f"❌ Data load error: {e}")
+
+
+def _ensure_insights_cache() -> None:
+    global CACHED_DATA, _CACHE_MTIME
+    if not os.path.exists(DATA_FILE):
+        return
+    try:
+        mtime = os.path.getmtime(DATA_FILE)
+    except OSError:
+        return
+    if mtime <= _CACHE_MTIME:
+        return
+    load_insights()
 
 
 def load_guides():
@@ -146,7 +180,7 @@ def _category_sections(items, limit=None):
             sections.append({
                 'theme': key,
                 'label': btn.get('label', key),
-                'insights': enrich_items(matched[:limit]),
+                'insights': enrich_items([_public_insight(i) for i in matched[:limit]]),
                 'total': len(matched),
             })
     return sections
@@ -155,7 +189,7 @@ def _category_sections(items, limit=None):
 def _latest_insights(items, limit=None):
     if limit is None:
         limit = int(SITE_CONFIG.get('homepage_latest_limit', 6))
-    return enrich_items(items[:limit])
+    return enrich_items([_public_insight(i) for i in items[:limit]])
 
 
 def _featured_category_lookup():
@@ -234,7 +268,7 @@ def _related_insights(current_id, categories, limit=3):
                 related.append(item)
             if len(related) >= limit:
                 break
-    return related[:limit]
+    return [_public_insight(i) for i in related[:limit]]
 
 
 def _insight_for_card(insight_id: str) -> dict | None:
@@ -276,6 +310,7 @@ load_guides()
 
 @app.route('/')
 def index():
+    _ensure_insights_cache()
     items = CACHED_DATA.get(DATA_KEY, [])
     top_guides = CACHED_GUIDES.get('en', [])[:3]
     stats = _get_footer_stats()
@@ -294,12 +329,13 @@ def index():
 
 @app.route('/category/<theme>')
 def category_page(theme):
+    _ensure_insights_cache()
     cat = _category_by_theme(theme)
     if not cat:
         abort(404)
     items = CACHED_DATA.get(DATA_KEY, [])
     mapping = SITE_CONFIG.get('js_category_map', {})
-    insights = enrich_items([i for i in items if _insight_matches_theme(i, theme, mapping)])
+    insights = enrich_items([_public_insight(i) for i in items if _insight_matches_theme(i, theme, mapping)])
     insights.sort(key=lambda x: (x.get('published', ''), x.get('id', '')), reverse=True)
     stats = _get_footer_stats()
     canonical = f"{SITE_CONFIG['site_url'].rstrip('/')}/category/{theme}"
@@ -314,10 +350,11 @@ def category_page(theme):
 
 @app.route('/api/insights')
 def api_insights():
+    _ensure_insights_cache()
     items = CACHED_DATA.get(DATA_KEY, [])
     spoofed = []
     for item in items:
-        s = copy.deepcopy(item)
+        s = _public_insight(item)
         new_cats = [CATEGORY_MAPPING.get(c.strip(), c.strip()) for c in s.get('categories', [])]
         s['categories'] = list(dict.fromkeys(new_cats))
         s['confidence_label'] = CONFIDENCE_LABELS.get(s.get('confidence', ''), s.get('confidence', ''))
@@ -484,7 +521,10 @@ def insight_detail(insight_id):
     post['hook'] = str(post.get('hook', '') or post.get('summary', ''))
 
     slug = str(post.get('id', insight_id)).replace('_en', '').replace('_ko', '')
-    post['thumbnail'] = str(post.get('thumbnail', '') or f"/static/images/{slug}.jpg")
+    post['thumbnail'] = _thumbnail_with_v(
+        str(post.get('thumbnail', '') or f"/static/images/{slug}.jpg"),
+        _thumbnail_cache_v(post.get("date") or post.get("published")),
+    )
 
     primary_theme, primary_label = _primary_category_for_item(post.get('categories', []))
 
