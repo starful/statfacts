@@ -1,129 +1,178 @@
 """
-OK Series shared guide content generator.
-- Generates EN/KO guide markdown files from guides.csv topics.
+StatFacts guide generator — English methodology guides from guides.csv.
+Writes `app/content/guides/{id}.md` (single EN file, no _ko).
 """
-import os
-import csv
-import re
+from __future__ import annotations
+
+import argparse
 import concurrent.futures
+import csv
+import os
+import re
+import sys
 from datetime import datetime
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
 from resolve_secrets import ensure_gemini_api_key
 
-ensure_gemini_api_key()
-API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
-
-SCRIPT_DIR      = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR        = os.path.dirname(SCRIPT_DIR)
-GUIDE_DIR       = os.path.join(BASE_DIR, 'app', 'content', 'guides')
+MODEL = "gemini-2.5-flash"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(SCRIPT_DIR)
+GUIDE_DIR = os.path.join(BASE_DIR, "app", "content", "guides")
 
 
 def clean_ai_response(text: str) -> str:
     text = text.strip()
-    text = re.sub(r'^```[a-z]*\n', '', text)
-    text = re.sub(r'\n```$', '', text)
-    text = re.sub(r'^(##\s*)?yaml\n', '', text, flags=re.IGNORECASE)
-    if '---' in text and not text.startswith('---'):
-        text = '---' + text.split('---', 1)[1]
+    text = re.sub(r"^```[a-z]*\n", "", text)
+    text = re.sub(r"\n```$", "", text)
+    text = re.sub(r"^(##\s*)?yaml\n", "", text, flags=re.IGNORECASE)
+    if "---" in text and not text.startswith("---"):
+        text = "---" + text.split("---", 1)[1]
     return text.strip()
 
 
-def generate_guide(guide_id: str, topic: str, lang: str, keywords: str):
+def _guide_exists(guide_id: str) -> bool:
+    return any(
+        os.path.isfile(os.path.join(GUIDE_DIR, name))
+        for name in (f"{guide_id}.md", f"{guide_id}_en.md")
+    )
+
+
+def generate_guide(guide_id: str, topic: str, keywords: str) -> bool:
     if not ensure_gemini_api_key():
         print("❌ GEMINI_API_KEY is missing — set env, .env, or GCP Secret Manager (GEMINI_API_KEY)")
-        return
+        return False
 
     try:
         from google import genai
+
         client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     except ImportError:
         print("❌ google-genai package required: pip install google-genai")
-        return
+        return False
 
-    print(f"🚀 [Guide AI] Generating {lang} guide: {topic}...")
+    print(f"🚀 [Guide AI] Generating guide: {topic}...")
 
     prompt = f"""
-You are a professional travel blogger and Japan expert.
-Write a high-quality, SEO-optimized educational guide article.
+You are an editorial writer for StatFacts (statfacts.net), a site about effect-size benchmarks for product, business, sports, and health teams.
+
+Write a practical English methodology guide — not travel content.
 
 [Topic]
 - Subject: {topic}
-- Language: {lang}
-- SEO Keywords: {keywords}
+- SEO keywords: {keywords}
 
-[Output Format - STRICT]
+[Output format — STRICT]
+Start with YAML frontmatter, then markdown body. No code fences.
+
 ---
-lang: {lang}
-title: "Write a catchy, SEO-friendly title in {'Korean' if lang == 'ko' else 'English'}"
+lang: en
+title: "Clear SEO title about {topic}"
+summary: "Two-sentence summary on one line."
 date: "{datetime.now().strftime('%Y-%m-%d')}"
-summary: "Write a compelling 2-sentence summary on a single line."
 ---
 
-[Article Requirements]
-1. Introduction: Hook the reader immediately.
-2. Main Content: Use descriptive H2 and H3 headers. Bold key terms.
-3. Bullet points and numbered lists where helpful.
-4. Minimum 4,000 characters for SEO depth.
-5. Conclusion: Call to action — encourage readers to use the interactive map.
+[Body requirements]
+1. Hook intro (2–3 sentences) for PMs, growth, or analysts.
+2. Use H2/H3 sections, bullets, and a short table if helpful.
+3. Link concepts to reading StatFacts insight cards (effect ranges, confidence, sample_context).
+4. Minimum 2,500 characters.
+5. End with "Related guides" linking to /guide/how-to-read-benchmarks and /tools/benchmark-calculator when relevant.
 
-IMPORTANT: Do NOT use markdown code blocks (```). Start directly with '---'.
+Tone: precise, no hype. Do not invent specific study citations — describe how to use benchmarks responsibly.
 """
 
     try:
-        response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=prompt
-        )
+        response = client.models.generate_content(model=MODEL, contents=prompt)
         final_text = clean_ai_response(response.text)
         os.makedirs(GUIDE_DIR, exist_ok=True)
-        filename = f"{guide_id}_{lang}.md"
-        with open(os.path.join(GUIDE_DIR, filename), 'w', encoding='utf-8') as f:
+        filename = f"{guide_id}.md"
+        with open(os.path.join(GUIDE_DIR, filename), "w", encoding="utf-8") as f:
             f.write(final_text)
         print(f"✅ [Done] {filename}")
+        return True
     except Exception as e:
-        print(f"❌ [Failed] {guide_id} ({lang}): {e}")
+        print(f"❌ [Failed] {guide_id}: {e}")
+        return False
 
 
-def run_guide_generator(limit: int = 3):
-    csv_path = os.path.join(SCRIPT_DIR, 'csv', 'guides.csv')
-    if not os.path.exists(csv_path):
+def _batch_missing_tasks(limit: int) -> list[tuple[str, str, str]]:
+    csv_path = os.path.join(SCRIPT_DIR, "csv", "guides.csv")
+    if not os.path.isfile(csv_path):
         print(f"❌ CSV not found: {csv_path}")
-        return
+        return []
 
-    tasks = []
-    created = 0
-
-    with open(csv_path, mode='r', encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            guide_id = row['id'].strip()
-            keywords = row.get('keywords', '').strip()
-
-            en_path = os.path.join(GUIDE_DIR, f"{guide_id}_en.md")
-            ko_path = os.path.join(GUIDE_DIR, f"{guide_id}_ko.md")
-
-            if not os.path.exists(en_path):
-                tasks.append((guide_id, row['topic_en'], 'en', keywords))
-            if not os.path.exists(ko_path):
-                tasks.append((guide_id, row['topic_ko'], 'ko', keywords))
-
-            if not os.path.exists(en_path) or not os.path.exists(ko_path):
-                created += 1
-
-            if created >= limit:
+    tasks: list[tuple[str, str, str]] = []
+    topics = 0
+    with open(csv_path, encoding="utf-8-sig") as f:
+        for row in csv.DictReader(f):
+            if topics >= limit:
                 break
+            guide_id = (row.get("id") or "").strip()
+            if not guide_id or guide_id.startswith("#"):
+                continue
+            if _guide_exists(guide_id):
+                continue
+            topic = (row.get("topic_en") or guide_id).strip()
+            keywords = (row.get("keywords") or "").strip()
+            tasks.append((guide_id, topic, keywords))
+            topics += 1
+    return tasks
 
+
+def _run_tasks(tasks: list[tuple[str, str, str]], *, dry_run: bool) -> int:
+    if dry_run:
+        print(f"🔔 [dry-run] {len(tasks)} guide(s)")
+        for gid, topic, _ in tasks:
+            print(f"   {gid}.md — {topic}")
+        return 0
     if not tasks:
         print("✨ No new guides to generate.")
-        return
+        return 0
 
-    print(f"🔔 Starting generation for {len(tasks)} guide files...")
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as ex:
-        ex.map(lambda p: generate_guide(*p), tasks)
+    print(f"🔔 Starting generation for {len(tasks)} guide(s)...")
+    ok = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
+        futures = [ex.submit(generate_guide, *t) for t in tasks]
+        for fut in concurrent.futures.as_completed(futures):
+            if fut.result():
+                ok += 1
+    failed = len(tasks) - ok
+    if failed:
+        print(f"⚠️  {failed} guide(s) failed")
+        return 1
+    return 0
+
+
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Generate StatFacts methodology guides.")
+    parser.add_argument(
+        "limit",
+        nargs="?",
+        type=int,
+        default=3,
+        help="Max CSV topics to fill per run (default 3).",
+    )
+    parser.add_argument(
+        "--batch-missing",
+        type=int,
+        metavar="N",
+        dest="batch_missing",
+        help="Same as positional limit (okadmin hub).",
+    )
+    parser.add_argument("--dry-run", action="store_true")
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parse_args(argv)
+    limit = args.batch_missing if args.batch_missing is not None else args.limit
+    tasks = _batch_missing_tasks(limit)
+    return _run_tasks(tasks, dry_run=args.dry_run)
 
 
 if __name__ == "__main__":
-    run_guide_generator(limit=3)
+    raise SystemExit(main())

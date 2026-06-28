@@ -72,7 +72,8 @@ generate_content() {
     print_step "STEP B: Generate content markdown"
     print_info "Script-level limits are controlled inside generator implementations."
     print_info "Requested limits: content=${CONTENT_LIMIT}, guide=${GUIDE_LIMIT}"
-    python3 script/guide_generator.py
+    python3 script/insight_generator.py --batch-missing "${CONTENT_LIMIT}"
+    python3 script/guide_generator.py --batch-missing "${GUIDE_LIMIT}"
     print_ok "Content generation completed"
 }
 
