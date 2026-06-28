@@ -1,9 +1,21 @@
-id,topic,intervention,outcome,effect_min,effect_max,effect_unit,categories,confidence,keywords
-# Top-level filter tags: ux | business | gaming | food | hr | travel | sports | health
-# Sub-tags: saas signup checkout baseball etc.
-signup-one-fewer-step,Signup friction,Remove one signup step,Signup completion rate,12,18,percent_relative,"ux,saas,signup",meta_analysis,"signup form conversion"
-social-login-signup,Social OAuth,Add Google/Apple one-click signup,Signup conversion rate,8,8,percent_point,"ux,saas,signup",ab_test,"oauth social login"
-checkout-field-reduction,Checkout UX,Reduce checkout fields to 12-14,Checkout conversion rate,20,60,percent_relative,"ux,checkout,business",meta_analysis,"cart checkout form fields"
-baseball-short-swing,MLB contact,Shorter Statcast swing path,Batting average vs slugging,2.3,11,percent_point,"sports,baseball",study,"bat swing length MLB"
-page-speed-bounce,Web performance,+1 second page load time,Bounce rate,7,11,percent_relative,"ux,business",estimate,"page speed core web vitals"
-sleep-productivity,Sleep extension,+1 hour sleep,Next-day task scores,10,25,percent_relative,"health,business",study,"sleep productivity"
+﻿id,topic,intervention,outcome,effect_min,effect_max,effect_unit,categories,confidence,keywords
+# Top-level filter tags: ux | business | gaming | food | hr | travel | sports | health,,,,,,,,,
+# Sub-tags: saas signup checkout baseball etc.,,,,,,,,,
+signup-one-fewer-step,Signup friction,Remove one signup step,Signup completion rate,12,18,percent_relative,"ux,saas,signup",meta_analysis,signup form conversion
+social-login-signup,Social OAuth,Add Google/Apple one-click signup,Signup conversion rate,8,8,percent_point,"ux,saas,signup",ab_test,oauth social login
+checkout-field-reduction,Checkout UX,Reduce checkout fields to 12-14,Checkout conversion rate,20,60,percent_relative,"ux,checkout,business",meta_analysis,cart checkout form fields
+baseball-short-swing,MLB contact,Shorter Statcast swing path,Batting average vs slugging,2.3,11,percent_point,"sports,baseball",study,bat swing length MLB
+page-speed-bounce,Web performance,+1 second page load time,Bounce rate,7,11,percent_relative,"ux,business",estimate,page speed core web vitals
+sleep-productivity,Sleep extension,+1 hour sleep,Next-day task scores,10,25,percent_relative,"health,business",study,sleep productivity
+guest-checkout-conversion,Guest checkout,Add guest checkout without forced account creation,Checkout completion rate,6,14,percent_relative,"ux,checkout,business",ab_test,guest checkout account friction
+trust-badges-checkout,Trust badges at checkout,Show security and payment trust badges near pay button,Checkout completion rate,3,9,percent_relative,"ux,checkout,business",ab_test,trust badge checkout security
+mobile-form-field-count,Mobile form field count,Reduce visible fields on mobile signup to five or fewer,Signup completion rate,8,18,percent_relative,"ux,signup,business",meta_analysis,mobile signup form fields
+annual-plan-discount-callout,Annual plan savings callout,Highlight annual savings percentage on pricing page,Share choosing annual billing,10,25,percent_relative,"business,saas",ab_test,annual billing pricing page
+onboarding-checklist-activation,Onboarding checklist,Show a 3–5 step onboarding checklist in first session,Week-1 activation rate,12,28,percent_relative,"ux,business,saas",ab_test,onboarding checklist activation
+push-notification-opt-in-timing,Push opt-in timing,Delay push permission prompt until after first value moment,Push opt-in rate,15,40,percent_relative,"ux,business",ab_test,push notification permission prompt
+interval-training-5k-time,Interval training for 5K,Add twice-weekly interval sessions to base training,5K race time improvement,2,5,percent_relative,"sports,running",study,interval training 5k running
+protein-post-workout-recovery,Post-workout protein timing,Consume 20–30g protein within 2 hours after strength training,Muscle soreness and recovery scores,10,22,percent_relative,"health,sports",study,protein recovery strength training
+mindfulness-break-work-stress,Micro mindfulness breaks,Offer guided 5-minute mindfulness breaks during workday,Self-reported stress scores,8,18,percent_relative,"health,hr",study,mindfulness workplace stress
+meal-kit-portion-adherence,Meal kit portion control,Switch to pre-portioned meal kits for weekday dinners,Weekly calorie intake,5,12,percent_relative,"food,health",study,meal kit portion calories
+tutorial-skip-option-games,Skippable game tutorial,Allow skipping the opening tutorial with clear later access,Day-1 retention,4,11,percent_relative,"gaming,ux",ab_test,game tutorial skip retention
+async-video-interview-completion,Async video interviews,Replace live phone screen with async one-way video interview,Candidate screen completion rate,12,30,percent_relative,"hr,business",estimate,async interview hiring funnel
