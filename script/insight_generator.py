@@ -16,6 +16,7 @@ load_dotenv()
 
 from md_clean import prepare_insight_md
 from resolve_secrets import ensure_gemini_api_key
+from topic_queue_csv import resolve as resolve_queue_csv
 
 MODEL = "gemini-2.5-flash"
 RETRYABLE_ERRORS = ("SSL", "UNEXPECTED_EOF", "503", "429", "timeout", "Connection")
@@ -135,12 +136,13 @@ Minimum 900 characters in body.
 
 
 def _batch_missing_tasks(limit: int) -> list[dict[str, str]]:
-    if not os.path.isfile(CSV_PATH):
-        print(f"❌ CSV not found: {CSV_PATH}")
+    csv_path = resolve_queue_csv("insights", CSV_PATH)
+    if not os.path.isfile(csv_path):
+        print(f"❌ CSV not found: {csv_path}")
         return []
 
     tasks: list[dict[str, str]] = []
-    with open(CSV_PATH, encoding="utf-8-sig") as f:
+    with open(csv_path, encoding="utf-8-sig") as f:
         for row in csv.DictReader(f):
             if len(tasks) >= limit:
                 break

@@ -18,6 +18,7 @@ load_dotenv()
 
 from md_clean import prepare_guide_md
 from resolve_secrets import ensure_gemini_api_key
+from topic_queue_csv import resolve as resolve_queue_csv
 
 MODEL = "gemini-2.5-flash"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -91,7 +92,7 @@ Tone: precise, no hype. Do not invent specific study citations — describe how 
 
 
 def _batch_missing_tasks(limit: int) -> list[tuple[str, str, str]]:
-    csv_path = os.path.join(SCRIPT_DIR, "csv", "guides.csv")
+    csv_path = resolve_queue_csv("guides", os.path.join(SCRIPT_DIR, "csv", "guides.csv"))
     if not os.path.isfile(csv_path):
         print(f"❌ CSV not found: {csv_path}")
         return []
