@@ -55,6 +55,47 @@ Body text here with enough content."""
         out = prepare_insight_md(raw, insight_id="x")
         self.assertIn("title: Q?", out)
 
+    def test_repairs_stray_bullet_in_frontmatter(self):
+        from md_clean import prepare_guide_md
+
+        raw = (
+            "---\nlang: en\ntitle: Test guide\nsummary: Summary line here.\n"
+            "date: 2026-06-29\n* Related guides link\n---\n\n## Intro\n"
+        ) + ("body " * 80)
+        out = prepare_guide_md(raw, guide_id="test-guide")
+        post = load_post(out)
+        self.assertEqual(post["title"], "Test guide")
+
+    def test_quotes_colon_in_scalar(self):
+        from md_clean import prepare_guide_md
+
+        raw = (
+            "---\nlang: en\n"
+            "title: Funnel steps: definitions for teams\n"
+            "summary: Summary line here.\n"
+            "date: 2026-06-29\n---\n\n## Intro\n"
+        ) + ("body " * 80)
+        out = prepare_guide_md(raw, guide_id="funnel")
+        post = load_post(out)
+        self.assertIn(":", post["title"])
+
+    def test_guide_fills_missing_title_from_fallback(self):
+        from md_clean import prepare_guide_md
+
+        raw = (
+            "---\nlang: en\nsummary: Short.\n"
+            "date: 2026-06-29\n---\n\n## Intro section\n"
+        ) + ("body " * 80)
+        out = prepare_guide_md(
+            raw,
+            guide_id="funnel-step-definitions",
+            fallback_title="Defining funnel steps consistently across teams",
+            fallback_summary="Defining funnel steps consistently across teams",
+        )
+        post = load_post(out)
+        self.assertEqual(post["title"], "Defining funnel steps consistently across teams")
+        self.assertGreaterEqual(len(post["summary"]), 10)
+
 
 if __name__ == "__main__":
     unittest.main()

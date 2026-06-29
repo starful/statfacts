@@ -79,7 +79,12 @@ Tone: precise, no hype. Do not invent specific study citations — describe how 
 
     try:
         response = client.models.generate_content(model=MODEL, contents=prompt)
-        final_text = prepare_guide_md(response.text, guide_id=guide_id)
+        final_text = prepare_guide_md(
+            response.text,
+            guide_id=guide_id,
+            fallback_title=topic,
+            fallback_summary=topic,
+        )
         os.makedirs(GUIDE_DIR, exist_ok=True)
         filename = f"{guide_id}.md"
         with open(os.path.join(GUIDE_DIR, filename), "w", encoding="utf-8") as f:

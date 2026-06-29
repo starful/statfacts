@@ -123,7 +123,17 @@ Minimum 900 characters in body.
 
     try:
         response = _generate_content(client, prompt)
-        final_text = prepare_insight_md(response.text, insight_id=iid)
+        final_text = prepare_insight_md(
+            response.text,
+            insight_id=iid,
+            fallback_title=topic,
+            fallback_intervention=intervention,
+            fallback_outcome=outcome,
+            fallback_summary=topic,
+            fallback_image_prompt=(
+                f"Editorial illustration about {topic}, no text, no logos"
+            ),
+        )
         os.makedirs(CONTENT_DIR, exist_ok=True)
         out_path = _insight_path(iid)
         with open(out_path, "w", encoding="utf-8") as f:
