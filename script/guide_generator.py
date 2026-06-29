@@ -16,17 +16,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from md_clean import clean_md
+from md_clean import prepare_guide_md
 from resolve_secrets import ensure_gemini_api_key
 
 MODEL = "gemini-2.5-flash"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
 GUIDE_DIR = os.path.join(BASE_DIR, "app", "content", "guides")
-
-
-def clean_ai_response(text: str) -> str:
-    return clean_md(text)
 
 
 def _guide_exists(guide_id: str) -> bool:
@@ -82,7 +78,7 @@ Tone: precise, no hype. Do not invent specific study citations — describe how 
 
     try:
         response = client.models.generate_content(model=MODEL, contents=prompt)
-        final_text = clean_ai_response(response.text)
+        final_text = prepare_guide_md(response.text, guide_id=guide_id)
         os.makedirs(GUIDE_DIR, exist_ok=True)
         filename = f"{guide_id}.md"
         with open(os.path.join(GUIDE_DIR, filename), "w", encoding="utf-8") as f:

@@ -1,7 +1,31 @@
 {
   "last_updated": "2026.06.29",
-  "total_count": 65,
+  "total_count": 66,
   "insights": [
+    {
+      "id": "async-video-interview-completion_en",
+      "slug": "async-video-interview-completion",
+      "lang": "en",
+      "title": "Does replacing live phone screens with async video interviews improve candidate completion rates?",
+      "summary": "Switching from live phone screens to async one-way video interviews can increase candidate screen completion rates by 12% to 30%.",
+      "categories": [
+        "hr",
+        "business"
+      ],
+      "intervention": "Replace live phone screen with async one-way video interview",
+      "outcome": "Candidate screen completion rate",
+      "effect_label": "+12–30%",
+      "effect_min": 12,
+      "effect_max": 30,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "For organizations streamlining their initial hiring funnel, particularly for high-volume roles or remote positions across various industries.",
+      "confidence": "estimate",
+      "hook": "Revolutionize your initial screening process and see more candidates complete their interviews.",
+      "thumbnail": "/static/images/async-video-interview-completion.jpg",
+      "published": "2026-06-29",
+      "link": "/insight/async-video-interview-completion_en"
+    },
     {
       "id": "tutorial-skip-option-games_en",
       "slug": "tutorial-skip-option-games",

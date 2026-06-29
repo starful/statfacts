@@ -86,11 +86,12 @@ def _normalize_published(raw: str, fpath: str) -> str:
 def main():
     print("🔨 Building insights_data.json ...")
     insights = []
+    skipped: list[str] = []
     data_key = _load_data_key()
 
     if not os.path.exists(CONTENT_DIR):
         print("❌ content directory not found")
-        return
+        raise SystemExit(1)
 
     for filename in sorted(os.listdir(CONTENT_DIR)):
         if not filename.endswith('.md'):
@@ -102,6 +103,9 @@ def main():
                 raw = f.read()
 
             post = frontmatter.loads(clean_md(raw))
+            title = str(post.get('title', 'Untitled')).strip()
+            if not title or title == 'Untitled':
+                raise ValueError('missing or Untitled title')
 
             cats = post.get('categories', [])
             if isinstance(cats, str):
@@ -140,6 +144,11 @@ def main():
             })
         except Exception as e:
             print(f"❌ Skip {filename}: {e}")
+            skipped.append(filename)
+
+    if skipped:
+        print(f"❌ Build failed: {len(skipped)} insight(s) could not be parsed")
+        raise SystemExit(1)
 
     insights.sort(key=lambda x: (x['published'], x['id']), reverse=True)
 

@@ -7,26 +7,22 @@ import argparse
 import concurrent.futures
 import csv
 import os
-import re
-import sys
+import time
 from datetime import datetime
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from md_clean import clean_md
+from md_clean import prepare_insight_md
 from resolve_secrets import ensure_gemini_api_key
 
 MODEL = "gemini-2.5-flash"
+RETRYABLE_ERRORS = ("SSL", "UNEXPECTED_EOF", "503", "429", "timeout", "Connection")
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
 CONTENT_DIR = os.path.join(BASE_DIR, "app", "content")
 CSV_PATH = os.path.join(SCRIPT_DIR, "csv", "insights.csv")
-
-
-def clean_ai_response(text: str) -> str:
-    return clean_md(text)
 
 
 def _insight_path(insight_id: str) -> str:
@@ -44,6 +40,22 @@ def _insight_exists(insight_id: str) -> bool:
 def _normalize_categories(raw: str) -> str:
     cats = [c.strip() for c in (raw or "").split(",") if c.strip()]
     return ", ".join(cats) if cats else "business"
+
+
+def _generate_content(client, prompt: str):
+    last_err: Exception | None = None
+    for attempt in range(3):
+        try:
+            return client.models.generate_content(model=MODEL, contents=prompt)
+        except Exception as e:
+            last_err = e
+            if attempt < 2 and any(tok in str(e) for tok in RETRYABLE_ERRORS):
+                time.sleep(2 ** attempt)
+                continue
+            raise
+    if last_err:
+        raise last_err
+    raise RuntimeError("generate_content failed")
 
 
 def generate_insight(row: dict[str, str]) -> bool:
@@ -87,7 +99,8 @@ Use these CSV facts exactly in frontmatter (do not change effect_min/max or unit
 - topic/keywords context: {topic} / {keywords}
 
 [Output format — STRICT]
-Start with YAML frontmatter then body. No markdown code fences.
+Start with YAML frontmatter delimited by --- lines, then markdown body.
+Do NOT use markdown code fences anywhere.
 
 Required frontmatter keys:
 id, lang: en, title (question form), categories (yaml list), intervention, outcome,
@@ -95,7 +108,7 @@ effect_min, effect_max, effect_unit, effect_direction (increase or decrease),
 sample_context (who/when this applies), confidence, date: "{datetime.now().strftime('%Y-%m-%d')}",
 summary (one line), hook (punchy one line), thumbnail: "/static/images/{iid}.jpg",
 image_prompt (one line for Imagen: editorial illustration, no text, no logos),
-sources (list of 1–2 items with name and url — real organizations only, use plausible URLs)
+sources (list of 1–2 items with lowercase keys name and url — real organizations only)
 
 Body sections (H2):
 ## What changes
@@ -108,8 +121,8 @@ Minimum 900 characters in body.
 """
 
     try:
-        response = client.models.generate_content(model=MODEL, contents=prompt)
-        final_text = clean_ai_response(response.text)
+        response = _generate_content(client, prompt)
+        final_text = prepare_insight_md(response.text, insight_id=iid)
         os.makedirs(CONTENT_DIR, exist_ok=True)
         out_path = _insight_path(iid)
         with open(out_path, "w", encoding="utf-8") as f:

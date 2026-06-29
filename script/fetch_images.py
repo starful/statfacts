@@ -5,13 +5,13 @@ StatFacts image generator (Google Imagen).
 - Run: python script/fetch_images.py  (requires GEMINI_API_KEY)
 """
 import os
-import re
+import sys
 import frontmatter
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from md_clean import clean_md
+from md_clean import clean_md, load_post
 from resolve_secrets import ensure_gemini_api_key
 
 ensure_gemini_api_key()
@@ -63,8 +63,7 @@ def generate_image(safe_name: str, prompt: str, *, force: bool = False) -> bool:
 
 def generate_image_for_markdown(fpath: str, *, force: bool = False) -> bool:
     """Generate thumbnail from a single insight markdown file."""
-    with open(fpath, 'r', encoding='utf-8') as f:
-        post = frontmatter.loads(clean_md(f.read()))
+    post = load_post(open(fpath, encoding='utf-8').read())
     safe_name = str(post.get('id', os.path.basename(fpath).replace('_en.md', '')))
     prompt = str(post.get('image_prompt', ''))
     if not prompt or len(prompt) < 10:
@@ -73,37 +72,50 @@ def generate_image_for_markdown(fpath: str, *, force: bool = False) -> bool:
     return generate_image(safe_name, prompt, force=force)
 
 
-def run(*, only_missing: bool = True, force: bool = False):
+def run(*, only_missing: bool = True, force: bool = False) -> int:
     if not ensure_gemini_api_key():
         print("❌ GEMINI_API_KEY is missing — set env, .env, or GCP Secret Manager (GEMINI_API_KEY)")
-        return
+        return 1
     global API_KEY
     API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
 
     processed = set()
+    failures: list[str] = []
     for filename in sorted(os.listdir(CONTENT_DIR)):
-        if not filename.endswith('_en.md'):  # generate once per EN source file
+        if not filename.endswith('_en.md'):
             continue
         fpath = os.path.join(CONTENT_DIR, filename)
         try:
-            with open(fpath, 'r', encoding='utf-8') as f:
-                post = frontmatter.loads(clean_md(f.read()))
+            post = load_post(open(fpath, encoding='utf-8').read())
             safe_name = str(post.get('id', filename.replace('_en.md', '')))
             if safe_name in processed:
                 continue
             prompt = str(post.get('image_prompt', ''))
+            img_path = os.path.join(IMAGES_DIR, f"{safe_name}.jpg")
             if not prompt or len(prompt) < 10:
-                print(f"⚠️  image_prompt is missing: {filename}")
+                if only_missing and os.path.exists(img_path):
+                    print(f"⏭️  Skip (image exists, no prompt): {filename}")
+                    processed.add(safe_name)
+                    continue
+                print(f"❌ image_prompt is missing: {filename}")
+                failures.append(filename)
                 continue
-            if only_missing and os.path.exists(os.path.join(IMAGES_DIR, f"{safe_name}.jpg")):
+            if only_missing and os.path.exists(img_path):
                 print(f"⏭️  Skip (already exists): {safe_name}.jpg")
                 processed.add(safe_name)
                 continue
-            generate_image(safe_name, prompt, force=force)
+            if not generate_image(safe_name, prompt, force=force):
+                failures.append(filename)
             processed.add(safe_name)
         except Exception as e:
             print(f"❌ Failed to read file ({filename}): {e}")
+            failures.append(filename)
+
+    if failures:
+        print(f"❌ Image step failed for {len(failures)} file(s)")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    run()
+    raise SystemExit(run())
