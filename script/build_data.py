@@ -83,6 +83,18 @@ def _normalize_published(raw: str, fpath: str) -> str:
     return date.today().isoformat()
 
 
+def _file_mtime_ts(fpath: str) -> float:
+    try:
+        return os.path.getmtime(fpath)
+    except OSError:
+        return 0.0
+
+
+def _insight_sort_key(published: str, sort_ts: float, item_id: str) -> tuple[str, float, str]:
+    """Newest first: date, then file mtime (same-day creation order), then id."""
+    return (published, sort_ts, item_id)
+
+
 def main():
     print("🔨 Building insights_data.json ...")
     insights = []
@@ -121,6 +133,7 @@ def main():
 
             thumbnail = str(post.get('thumbnail', '') or f"/static/images/{slug}.jpg")
 
+            published = _normalize_published(post.get('date', ''), fpath)
             insights.append({
                 "id":           item_id,
                 "slug":         slug,
@@ -139,8 +152,9 @@ def main():
                 "confidence":   str(post.get('confidence', 'estimate')),
                 "hook":         str(post.get('hook', '') or post.get('summary', '')),
                 "thumbnail":    thumbnail,
-                "published":    _normalize_published(post.get('date', ''), fpath),
+                "published":    published,
                 "link":         f"/insight/{item_id}",
+                "_sort_ts":     _file_mtime_ts(fpath),
             })
         except Exception as e:
             print(f"❌ Skip {filename}: {e}")
@@ -150,7 +164,12 @@ def main():
         print(f"❌ Build failed: {len(skipped)} insight(s) could not be parsed")
         raise SystemExit(1)
 
-    insights.sort(key=lambda x: (x['published'], x['id']), reverse=True)
+    insights.sort(
+        key=lambda x: _insight_sort_key(x["published"], x["_sort_ts"], x["id"]),
+        reverse=True,
+    )
+    for row in insights:
+        row.pop("_sort_ts", None)
 
     output = {
         "last_updated": datetime.now().strftime("%Y.%m.%d"),

@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from datetime import date, datetime, timedelta
 
-from script.build_data import _normalize_published
+from script.build_data import _insight_sort_key, _normalize_published
 
 
 class NormalizePublishedTest(unittest.TestCase):
@@ -29,6 +29,19 @@ class NormalizePublishedTest(unittest.TestCase):
             self.assertEqual(pub, future.isoformat())
         finally:
             os.unlink(path)
+
+
+class InsightSortKeyTest(unittest.TestCase):
+    def test_same_day_orders_by_mtime_then_id(self):
+        day = "2026-07-05"
+        newer = _insight_sort_key(day, 2000.0, "zebra-slug")
+        older = _insight_sort_key(day, 1000.0, "alpha-slug")
+        self.assertGreater(newer, older)
+
+    def test_newer_date_wins_over_newer_mtime(self):
+        newer_day = _insight_sort_key("2026-07-06", 1.0, "a")
+        older_day = _insight_sort_key("2026-07-05", 9999.0, "z")
+        self.assertGreater(newer_day, older_day)
 
 
 if __name__ == "__main__":
