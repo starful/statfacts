@@ -18,6 +18,15 @@ from md_clean import prepare_insight_md
 from resolve_secrets import ensure_gemini_api_key
 from topic_queue_csv import resolve as resolve_queue_csv
 
+
+def _emit_pipeline_result(**kwargs):
+    try:
+        from generation_result import emit_generation_result
+
+        emit_generation_result(**kwargs)
+    except ImportError:
+        pass
+
 MODEL = "gemini-2.5-flash"
 RETRYABLE_ERRORS = ("SSL", "UNEXPECTED_EOF", "503", "429", "timeout", "Connection")
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -172,9 +181,11 @@ def _run_tasks(tasks: list[dict[str, str]], *, dry_run: bool) -> int:
         print(f"🔔 [dry-run] {len(tasks)} insight(s)")
         for row in tasks:
             print(f"   {row.get('id')}_en.md")
+        _emit_pipeline_result(step="items", topics=len(tasks), generated=0, skipped=len(tasks))
         return 0
     if not tasks:
         print("✨ No new insights to generate.")
+        _emit_pipeline_result(step="items", topics=0, generated=0)
         return 0
 
     print(f"🔔 Starting generation for {len(tasks)} insight(s)...")
@@ -185,6 +196,7 @@ def _run_tasks(tasks: list[dict[str, str]], *, dry_run: bool) -> int:
             if fut.result():
                 ok += 1
     failed = len(tasks) - ok
+    _emit_pipeline_result(step="items", topics=len(tasks), generated=ok, failed=failed)
     if failed:
         print(f"⚠️  {failed} insight(s) failed")
         return 1

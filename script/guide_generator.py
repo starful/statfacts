@@ -20,6 +20,15 @@ from md_clean import prepare_guide_md
 from resolve_secrets import ensure_gemini_api_key
 from topic_queue_csv import resolve as resolve_queue_csv
 
+
+def _emit_pipeline_result(**kwargs):
+    try:
+        from generation_result import emit_generation_result
+
+        emit_generation_result(**kwargs)
+    except ImportError:
+        pass
+
 MODEL = "gemini-2.5-flash"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
@@ -125,9 +134,11 @@ def _run_tasks(tasks: list[tuple[str, str, str]], *, dry_run: bool) -> int:
         print(f"🔔 [dry-run] {len(tasks)} guide(s)")
         for gid, topic, _ in tasks:
             print(f"   {gid}.md — {topic}")
+        _emit_pipeline_result(step="guides", topics=len(tasks), generated=0, skipped=len(tasks))
         return 0
     if not tasks:
         print("✨ No new guides to generate.")
+        _emit_pipeline_result(step="guides", topics=0, generated=0)
         return 0
 
     print(f"🔔 Starting generation for {len(tasks)} guide(s)...")
@@ -138,6 +149,7 @@ def _run_tasks(tasks: list[tuple[str, str, str]], *, dry_run: bool) -> int:
             if fut.result():
                 ok += 1
     failed = len(tasks) - ok
+    _emit_pipeline_result(step="guides", topics=len(tasks), generated=ok, failed=failed)
     if failed:
         print(f"⚠️  {failed} guide(s) failed")
         return 1
