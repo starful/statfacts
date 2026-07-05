@@ -1,6 +1,6 @@
 {
   "last_updated": "2026.07.05",
-  "total_count": 80,
+  "total_count": 83,
   "insights": [
     {
       "id": "subscription-pause-retention_en",
@@ -73,6 +73,78 @@
       "thumbnail": "/static/images/post-match-party-up.jpg",
       "published": "2026-07-05",
       "link": "/insight/post-match-party-up_en"
+    },
+    {
+      "id": "onboarding-buddy-retention_en",
+      "slug": "onboarding-buddy-retention",
+      "lang": "en",
+      "title": "Does an onboarding buddy improve new hire retention?",
+      "summary": "Implementing a dedicated peer buddy program for new hires significantly increases 90-day retention rates.",
+      "categories": [
+        "hr",
+        "onboarding"
+      ],
+      "intervention": "Assigning a dedicated peer buddy to new hires during their first 90 days",
+      "outcome": "90-day new hire retention rate",
+      "effect_label": "+15–36%",
+      "effect_min": 15,
+      "effect_max": 36,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "New hires across various industries and company sizes during their initial 90-day employment period.",
+      "confidence": "study",
+      "hook": "Keep your best new talent longer, right from the start.",
+      "thumbnail": "/static/images/onboarding-buddy-retention.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/onboarding-buddy-retention_en"
+    },
+    {
+      "id": "hotel-map-search-conversion_en",
+      "slug": "hotel-map-search-conversion",
+      "lang": "en",
+      "title": "Does defaulting to a map view increase hotel booking conversion?",
+      "summary": "Switching the default hotel search display from a list to an interactive map view can boost booking conversion by 6-14%.",
+      "categories": [
+        "travel",
+        "e-commerce"
+      ],
+      "intervention": "Defaulting users to an interactive map search view rather than a standard list view for hotel search results",
+      "outcome": "Hotel booking conversion rate",
+      "effect_label": "+6–14%",
+      "effect_min": 6,
+      "effect_max": 14,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Online travel platforms and hotel booking websites targeting users searching for accommodation in specific geographic locations.",
+      "confidence": "ab_test",
+      "hook": "Stop listing, start mapping! Your hotel bookings could be waiting on a new view.",
+      "thumbnail": "/static/images/hotel-map-search-conversion.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/hotel-map-search-conversion_en"
+    },
+    {
+      "id": "dry-brining-poultry-moisture_en",
+      "slug": "dry-brining-poultry-moisture",
+      "lang": "en",
+      "title": "Does dry-brining poultry increase moisture retention after roasting?",
+      "summary": "Dry-brining poultry 12-24 hours before roasting can increase its moisture retention by 10-15% compared to salting immediately before cooking.",
+      "categories": [
+        "food",
+        "cooking"
+      ],
+      "intervention": "Dry-brining poultry (salting 12 to 24 hours before cooking) instead of salting immediately before cooking",
+      "outcome": "Moisture retention (measured by weight yield after roasting)",
+      "effect_label": "+10–15%",
+      "effect_min": 10,
+      "effect_max": 15,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Home cooks and professional chefs preparing poultry for roasting, especially whole birds or larger cuts.",
+      "confidence": "study",
+      "hook": "Unlock juicier roasted poultry with a simple, smart prep step.",
+      "thumbnail": "/static/images/dry-brining-poultry-moisture.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/dry-brining-poultry-moisture_en"
     },
     {
       "id": "stay-interviews-employee-retention_en",
