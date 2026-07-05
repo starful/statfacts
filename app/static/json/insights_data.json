@@ -1,7 +1,79 @@
 {
   "last_updated": "2026.07.05",
-  "total_count": 77,
+  "total_count": 80,
   "insights": [
+    {
+      "id": "subscription-pause-retention_en",
+      "slug": "subscription-pause-retention",
+      "lang": "en",
+      "title": "Does offering a temporary subscription pause prevent permanent churn?",
+      "summary": "Offering a temporary subscription pause option during the cancellation process can significantly reduce permanent churn.",
+      "categories": [
+        "business",
+        "subscription"
+      ],
+      "intervention": "Offering a temporary subscription pause option during the cancellation flow",
+      "outcome": "Permanent churn reduction",
+      "effect_label": "-15–30%",
+      "effect_min": 15,
+      "effect_max": 30,
+      "effect_unit": "percent_relative",
+      "effect_direction": "decrease",
+      "sample_context": "Subscribers of online services contemplating cancellation.",
+      "confidence": "ab_test",
+      "hook": "Stop them from leaving for good—just hit pause.",
+      "thumbnail": "/static/images/subscription-pause-retention.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/subscription-pause-retention_en"
+    },
+    {
+      "id": "search-autocomplete-conversion_en",
+      "slug": "search-autocomplete-conversion",
+      "lang": "en",
+      "title": "Does rich search autocomplete significantly boost e-commerce conversion?",
+      "summary": "Implementing rich autocomplete with product previews in e-commerce search can increase search-to-purchase conversion rates by 15-24% relative.",
+      "categories": [
+        "ux",
+        "ecommerce"
+      ],
+      "intervention": "Adding rich autocomplete suggestions with product previews to the search bar",
+      "outcome": "Search-to-purchase conversion rate",
+      "effect_label": "+15–24%",
+      "effect_min": 15,
+      "effect_max": 24,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "E-commerce websites, specifically for users interacting with the search bar, across various product categories and market sizes.",
+      "confidence": "ab_test",
+      "hook": "Turn your search bar into a conversion powerhouse with smarter suggestions.",
+      "thumbnail": "/static/images/search-autocomplete-conversion.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/search-autocomplete-conversion_en"
+    },
+    {
+      "id": "post-match-party-up_en",
+      "slug": "post-match-party-up",
+      "lang": "en",
+      "title": "Does a one-click 'Party Up' button after a match boost solo player retention?",
+      "summary": "A simple 'Party Up' button post-match can significantly boost solo player retention for multiplayer game players.",
+      "categories": [
+        "gaming",
+        "social"
+      ],
+      "intervention": "Adding a one-click 'Party Up' button on the post-match scoreboard for solo players",
+      "outcome": "Day-7 player retention",
+      "effect_label": "+8–15%",
+      "effect_min": 8,
+      "effect_max": 15,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Solo players in multiplayer online games, immediately after completing a match.",
+      "confidence": "ab_test",
+      "hook": "Help solo players squad up to keep them coming back.",
+      "thumbnail": "/static/images/post-match-party-up.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/post-match-party-up_en"
+    },
     {
       "id": "stay-interviews-employee-retention_en",
       "slug": "stay-interviews-employee-retention",

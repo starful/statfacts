@@ -86,6 +86,8 @@ def _needs_quoting(val: str) -> bool:
         return True
     if val and val[0] in "*&!#@`|>":
         return True
+    if "/" in val:
+        return True
     if val.lower() in ("yes", "no", "true", "false", "null", "~"):
         return True
     return False
@@ -119,6 +121,8 @@ def _repair_fm_line(line: str) -> str:
             return line
         if _needs_quoting(rest):
             return f"{indent}- {_quote_yaml_scalar(rest)}"
+        # Markdown list line leaked into frontmatter (invalid YAML mapping).
+        return f"{indent}# {stripped}"
 
     return line
 
@@ -305,6 +309,17 @@ def prepare_insight_md(
     return _render_post(post)
 
 
+def _extract_body(raw: str) -> str:
+    cleaned = clean_md(raw)
+    match = re.search(r"(^|\n)(## .+)", cleaned, re.DOTALL)
+    if match:
+        return match.group(2).strip()
+    parts = _split_delimited(cleaned)
+    if parts is not None and parts[1].strip():
+        return parts[1].strip()
+    return cleaned.strip()
+
+
 def prepare_guide_md(
     raw: str,
     *,
@@ -313,7 +328,12 @@ def prepare_guide_md(
     fallback_summary: str = "",
 ) -> str:
     cleaned = clean_md(raw)
-    post, _ = _loads_post(cleaned)
+    try:
+        post, _ = _loads_post(cleaned)
+    except Exception:
+        body = _extract_body(raw)
+        post = frontmatter.Post(body)
+        post.metadata = {}
     _fill_guide_metadata(
         post,
         guide_id=guide_id,

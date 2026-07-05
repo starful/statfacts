@@ -55,6 +55,17 @@ Body text here with enough content."""
         out = prepare_insight_md(raw, insight_id="x")
         self.assertIn("title: Q?", out)
 
+    def test_repairs_stray_dash_bullet_in_frontmatter(self):
+        from md_clean import prepare_guide_md
+
+        raw = (
+            "---\nlang: en\ntitle: Test guide\nsummary: Summary line here.\n"
+            "date: 2026-06-29\n- Related guides link\n---\n\n## Intro\n"
+        ) + ("body " * 80)
+        out = prepare_guide_md(raw, guide_id="test-guide")
+        post = load_post(out)
+        self.assertEqual(post["title"], "Test guide")
+
     def test_repairs_stray_bullet_in_frontmatter(self):
         from md_clean import prepare_guide_md
 
