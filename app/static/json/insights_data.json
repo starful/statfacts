@@ -1,6 +1,6 @@
 {
   "last_updated": "2026.07.05",
-  "total_count": 83,
+  "total_count": 86,
   "insights": [
     {
       "id": "subscription-pause-retention_en",
@@ -99,6 +99,30 @@
       "link": "/insight/onboarding-buddy-retention_en"
     },
     {
+      "id": "live-chat-pricing-page_en",
+      "slug": "live-chat-pricing-page",
+      "lang": "en",
+      "title": "Does adding a proactive live chat widget to a B2B SaaS pricing page increase inbound demo bookings?",
+      "summary": "Adding a proactive live chat widget to a B2B SaaS pricing page can increase inbound demo bookings by 8% to 15% relative to not having it.",
+      "categories": [
+        "business",
+        "conversion"
+      ],
+      "intervention": "Adding a proactive live chat widget to the B2B SaaS pricing page",
+      "outcome": "Inbound demo booking rate",
+      "effect_label": "+8–15%",
+      "effect_min": 8,
+      "effect_max": 15,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "B2B SaaS companies, particularly those offering complex or high-value solutions where prospects may have immediate questions about features, plans, or bespoke pricing.",
+      "confidence": "ab_test",
+      "hook": "Turn pricing page visitors into qualified leads with well-timed, proactive chat assistance.",
+      "thumbnail": "/static/images/live-chat-pricing-page.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/live-chat-pricing-page_en"
+    },
+    {
       "id": "hotel-map-search-conversion_en",
       "slug": "hotel-map-search-conversion",
       "lang": "en",
@@ -145,6 +169,54 @@
       "thumbnail": "/static/images/dry-brining-poultry-moisture.jpg",
       "published": "2026-07-05",
       "link": "/insight/dry-brining-poultry-moisture_en"
+    },
+    {
+      "id": "daily-first-win-bonus_en",
+      "slug": "daily-first-win-bonus",
+      "lang": "en",
+      "title": "Does a daily first-win bonus improve next-day retention?",
+      "summary": "Implementing a daily \"first win\" reward can significantly boost next-day player retention in games.",
+      "categories": [
+        "gaming",
+        "retention"
+      ],
+      "intervention": "Introducing a \"first win of the day\" experience point multiplier reward",
+      "outcome": "Next-day user retention (D1 retention)",
+      "effect_label": "+3–8%",
+      "effect_min": 3,
+      "effect_max": 8,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Players in online games with daily play loops and progression systems.",
+      "confidence": "ab_test",
+      "hook": "Want players to come back tomorrow? Give them a reason to win today.",
+      "thumbnail": "/static/images/daily-first-win-bonus.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/daily-first-win-bonus_en"
+    },
+    {
+      "id": "blooming-spices-in-oil_en",
+      "slug": "blooming-spices-in-oil",
+      "lang": "en",
+      "title": "Does blooming spices in oil significantly enhance the flavor of a dish?",
+      "summary": "Heating ground spices in oil or cooking fat before adding liquids can increase the sensory flavor intensity of a finished dish by 15% to 30%.",
+      "categories": [
+        "food",
+        "cooking"
+      ],
+      "intervention": "Heating ground spices in oil or cooking fat before adding liquid ingredients",
+      "outcome": "Sensory flavor intensity scores of the finished dish",
+      "effect_label": "+15–30%",
+      "effect_min": 15,
+      "effect_max": 30,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "For home cooks and professional chefs preparing dishes that incorporate ground spices.",
+      "confidence": "study",
+      "hook": "Unlock a powerful flavor boost in your cooking with this simple, ancient technique!",
+      "thumbnail": "/static/images/blooming-spices-in-oil.jpg",
+      "published": "2026-07-05",
+      "link": "/insight/blooming-spices-in-oil_en"
     },
     {
       "id": "stay-interviews-employee-retention_en",
