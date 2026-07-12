@@ -700,6 +700,7 @@ def sitemap_xml():
         _sitemap_url(f"{base}/guide", guide_lastmod, 'weekly'),
         _sitemap_url(f"{base}/tools/benchmark-calculator", tool_lastmod, 'monthly'),
         _sitemap_url(f"{base}/about.html", about_lastmod, 'monthly'),
+        _sitemap_url(f"{base}/contact.html", privacy_lastmod, 'yearly'),
         _sitemap_url(f"{base}/privacy.html", privacy_lastmod, 'monthly'),
     ]
 
@@ -742,6 +743,12 @@ def about():
 @app.route('/privacy.html')
 def privacy():
     return render_template('privacy.html', site=SITE_CONFIG)
+
+
+@app.route('/contact.html')
+@app.route('/contact')
+def contact():
+    return render_template('contact.html', site=SITE_CONFIG)
 
 
 if __name__ == '__main__':
