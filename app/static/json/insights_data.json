@@ -1,7 +1,31 @@
 {
   "last_updated": "2026.07.20",
-  "total_count": 98,
+  "total_count": 99,
   "insights": [
+    {
+      "id": "caffeine-nap-daytime-alertness_en",
+      "slug": "caffeine-nap-daytime-alertness",
+      "lang": "en",
+      "title": "Can a \"Caffeine Nap\" Sharpen Your Daytime Focus?",
+      "summary": "Combining a precise dose of caffeine with a short nap can significantly enhance post-nap alertness and vigilance.",
+      "categories": [
+        "health",
+        "sleep"
+      ],
+      "intervention": "Consuming 200mg of caffeine immediately followed by a 20-minute nap to clear adenosine before caffeine kicks in",
+      "outcome": "Post-nap cognitive alertness and psychomotor vigilance performance",
+      "effect_label": "+15–25%",
+      "effect_min": 15,
+      "effect_max": 25,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Adults seeking a boost in daytime cognitive performance and vigilance without extended sleep.",
+      "confidence": "study",
+      "hook": "The ultimate productivity hack might just be a nap *with* your coffee.",
+      "thumbnail": "/static/images/caffeine-nap-daytime-alertness.jpg",
+      "published": "2026-07-20",
+      "link": "/insight/caffeine-nap-daytime-alertness_en"
+    },
     {
       "id": "colorblind-mode-accessibility-retention_en",
       "slug": "colorblind-mode-accessibility-retention",
