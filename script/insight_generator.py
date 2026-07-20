@@ -14,6 +14,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from content_quality import (
+    INSIGHT_MIN_CHARS,
+    QUALITY_PROMPT_RULES,
+    is_blocked_insight_id,
+)
 from md_clean import prepare_insight_md
 from resolve_secrets import ensure_gemini_api_key
 from topic_queue_csv import resolve as resolve_queue_csv
@@ -92,9 +97,17 @@ def generate_insight(row: dict[str, str]) -> bool:
     confidence = (row.get("confidence") or "estimate").strip()
     keywords = (row.get("keywords") or "").strip()
 
+    if is_blocked_insight_id(iid):
+        print(f"⏭️ Blocked insight id: {iid}")
+        return False
+
     print(f"🚀 [Insight AI] {topic}...")
 
-    prompt = f"""
+    feedback = ""
+    last_err: Exception | None = None
+    for attempt in range(3):
+        feedback_block = f"\n[FIX PREVIOUS FAILURE]\n{feedback}\n" if feedback else ""
+        prompt = f"""
 You are a StatFacts (statfacts.net) editor. Write one English insight article as markdown.
 
 Use these CSV facts exactly in frontmatter (do not change effect_min/max or unit):
@@ -108,6 +121,8 @@ Use these CSV facts exactly in frontmatter (do not change effect_min/max or unit
 - confidence: {confidence}
 - topic/keywords context: {topic} / {keywords}
 
+{QUALITY_PROMPT_RULES}
+{feedback_block}
 [Output format — STRICT]
 Start with YAML frontmatter delimited by --- lines, then markdown body.
 Do NOT use markdown code fences anywhere.
@@ -120,38 +135,39 @@ summary (one line), hook (punchy one line), thumbnail: "/static/images/{iid}.jpg
 image_prompt (one line for Imagen: editorial illustration, no text, no logos),
 sources (list of 1–2 items with lowercase keys name and url — real organizations only)
 
-Body sections (H2):
-## What changes
-## When this tends to work
-## When to be careful
-## Practical takeaway
+Body: invent unique ## headings for THIS intervention (at least 3). Cover the effect,
+when it tends to apply, caveats, and a concrete takeaway — without using the banned
+template titles listed above.
 
 Keep effect ranges consistent with frontmatter. Tone: concise, cite-style, no fabricated paper titles in body.
-Minimum 900 characters in body.
+Minimum {INSIGHT_MIN_CHARS} characters in body.
 """
+        try:
+            response = _generate_content(client, prompt)
+            final_text = prepare_insight_md(
+                response.text,
+                insight_id=iid,
+                fallback_title=topic,
+                fallback_intervention=intervention,
+                fallback_outcome=outcome,
+                fallback_summary=topic,
+                fallback_image_prompt=(
+                    f"Editorial illustration about {topic}, no text, no logos"
+                ),
+            )
+            os.makedirs(CONTENT_DIR, exist_ok=True)
+            out_path = _insight_path(iid)
+            with open(out_path, "w", encoding="utf-8") as f:
+                f.write(final_text)
+            print(f"✅ [Done] {iid}_en.md")
+            return True
+        except Exception as e:
+            last_err = e
+            feedback = str(e)
+            print(f"⚠️  insight attempt {attempt + 1} failed: {e}")
 
-    try:
-        response = _generate_content(client, prompt)
-        final_text = prepare_insight_md(
-            response.text,
-            insight_id=iid,
-            fallback_title=topic,
-            fallback_intervention=intervention,
-            fallback_outcome=outcome,
-            fallback_summary=topic,
-            fallback_image_prompt=(
-                f"Editorial illustration about {topic}, no text, no logos"
-            ),
-        )
-        os.makedirs(CONTENT_DIR, exist_ok=True)
-        out_path = _insight_path(iid)
-        with open(out_path, "w", encoding="utf-8") as f:
-            f.write(final_text)
-        print(f"✅ [Done] {iid}_en.md")
-        return True
-    except Exception as e:
-        print(f"❌ [Failed] {iid}: {e}")
-        return False
+    print(f"❌ [Failed] {iid}: {last_err}")
+    return False
 
 
 def _batch_missing_tasks(limit: int) -> list[dict[str, str]]:
@@ -166,7 +182,7 @@ def _batch_missing_tasks(limit: int) -> list[dict[str, str]]:
             if len(tasks) >= limit:
                 break
             iid = (row.get("id") or "").strip()
-            if not iid or iid.startswith("#"):
+            if not iid or iid.startswith("#") or is_blocked_insight_id(iid):
                 continue
             if _insight_exists(iid):
                 continue

@@ -260,6 +260,8 @@ def load_post(raw: str):
 
 
 def validate_insight_post(post, *, insight_id: str = "") -> None:
+    from content_quality import assert_quality
+
     title = str(post.get("title", "")).strip()
     if not title or title == "Untitled":
         raise ValueError(f"{insight_id or post.get('id')}: missing title")
@@ -269,19 +271,24 @@ def validate_insight_post(post, *, insight_id: str = "") -> None:
     if not str(post.get("intervention", "")).strip():
         raise ValueError(f"{insight_id or post.get('id')}: missing intervention")
     body = str(post.content or "").strip()
-    if "## What changes" not in body:
-        raise ValueError(f"{insight_id or post.get('id')}: missing body sections")
+    if len(re.findall(r"^##\s+\S", body, re.M)) < 3:
+        raise ValueError(f"{insight_id or post.get('id')}: need at least 3 ## sections")
+    assert_quality(body, kind="insight")
 
 
 def validate_guide_post(post, *, guide_id: str = "") -> None:
+    from content_quality import GUIDE_MIN_CHARS, assert_quality
+
     title = str(post.get("title", "")).strip()
     if not title or title == "Untitled":
         raise ValueError(f"{guide_id or 'guide'}: missing title")
     summary = str(post.get("summary", "")).strip()
     if len(summary) < 10:
         raise ValueError(f"{guide_id or 'guide'}: missing summary")
-    if len(str(post.content or "").strip()) < 200:
-        raise ValueError(f"{guide_id or 'guide'}: body too short")
+    body = str(post.content or "").strip()
+    if len(body) < GUIDE_MIN_CHARS:
+        raise ValueError(f"{guide_id or 'guide'}: body too short ({len(body)} < {GUIDE_MIN_CHARS})")
+    assert_quality(body, kind="guide")
 
 
 def prepare_insight_md(

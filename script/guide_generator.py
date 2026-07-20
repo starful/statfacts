@@ -16,6 +16,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from content_quality import (
+    GUIDE_MIN_CHARS,
+    QUALITY_PROMPT_RULES,
+    is_blocked_guide_id,
+)
 from md_clean import prepare_guide_md
 from resolve_secrets import ensure_gemini_api_key
 from topic_queue_csv import resolve as resolve_queue_csv
@@ -55,9 +60,17 @@ def generate_guide(guide_id: str, topic: str, keywords: str) -> bool:
         print("❌ google-genai package required: pip install google-genai")
         return False
 
+    if is_blocked_guide_id(guide_id):
+        print(f"⏭️ Blocked guide id: {guide_id}")
+        return False
+
     print(f"🚀 [Guide AI] Generating guide: {topic}...")
 
-    prompt = f"""
+    feedback = ""
+    last_err: Exception | None = None
+    for attempt in range(3):
+        feedback_block = f"\n[FIX PREVIOUS FAILURE]\n{feedback}\n" if feedback else ""
+        prompt = f"""
 You are an editorial writer for StatFacts (statfacts.net), a site about effect-size benchmarks for product, business, sports, and health teams.
 
 Write a practical English methodology guide — not travel content.
@@ -66,6 +79,8 @@ Write a practical English methodology guide — not travel content.
 - Subject: {topic}
 - SEO keywords: {keywords}
 
+{QUALITY_PROMPT_RULES}
+{feedback_block}
 [Output format — STRICT]
 Start with YAML frontmatter, then markdown body. No code fences.
 
@@ -78,31 +93,34 @@ date: "{datetime.now().strftime('%Y-%m-%d')}"
 
 [Body requirements]
 1. Hook intro (2–3 sentences) for PMs, growth, or analysts.
-2. Use H2/H3 sections, bullets, and a short table if helpful.
+2. Use unique H2/H3 sections tailored to THIS topic (at least 3 H2s), bullets, and a short table if helpful.
 3. Link concepts to reading StatFacts insight cards (effect ranges, confidence, sample_context).
-4. Minimum 2,500 characters.
-5. End with "Related guides" linking to /guide/how-to-read-benchmarks and /tools/benchmark-calculator when relevant.
+4. Minimum {GUIDE_MIN_CHARS} characters.
+5. End with related links to /guide/how-to-read-benchmarks and /tools/benchmark-calculator when relevant.
 
 Tone: precise, no hype. Do not invent specific study citations — describe how to use benchmarks responsibly.
 """
+        try:
+            response = client.models.generate_content(model=MODEL, contents=prompt)
+            final_text = prepare_guide_md(
+                response.text,
+                guide_id=guide_id,
+                fallback_title=topic,
+                fallback_summary=topic,
+            )
+            os.makedirs(GUIDE_DIR, exist_ok=True)
+            filename = f"{guide_id}.md"
+            with open(os.path.join(GUIDE_DIR, filename), "w", encoding="utf-8") as f:
+                f.write(final_text)
+            print(f"✅ [Done] {filename}")
+            return True
+        except Exception as e:
+            last_err = e
+            feedback = str(e)
+            print(f"⚠️  guide attempt {attempt + 1} failed: {e}")
 
-    try:
-        response = client.models.generate_content(model=MODEL, contents=prompt)
-        final_text = prepare_guide_md(
-            response.text,
-            guide_id=guide_id,
-            fallback_title=topic,
-            fallback_summary=topic,
-        )
-        os.makedirs(GUIDE_DIR, exist_ok=True)
-        filename = f"{guide_id}.md"
-        with open(os.path.join(GUIDE_DIR, filename), "w", encoding="utf-8") as f:
-            f.write(final_text)
-        print(f"✅ [Done] {filename}")
-        return True
-    except Exception as e:
-        print(f"❌ [Failed] {guide_id}: {e}")
-        return False
+    print(f"❌ [Failed] {guide_id}: {last_err}")
+    return False
 
 
 def _batch_missing_tasks(limit: int) -> list[tuple[str, str, str]]:
@@ -118,7 +136,7 @@ def _batch_missing_tasks(limit: int) -> list[tuple[str, str, str]]:
             if topics >= limit:
                 break
             guide_id = (row.get("id") or "").strip()
-            if not guide_id or guide_id.startswith("#"):
+            if not guide_id or guide_id.startswith("#") or is_blocked_guide_id(guide_id):
                 continue
             if _guide_exists(guide_id):
                 continue
