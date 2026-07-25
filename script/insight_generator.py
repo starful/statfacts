@@ -14,13 +14,23 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+def _claude_md(prompt: str) -> str:
+    """MD text via Claude CLI subscription (not Claude API)."""
+    import sys
+    from pathlib import Path
+    _shared = Path(__file__).resolve().parents[2] / "shared"
+    if str(_shared) not in sys.path:
+        sys.path.insert(0, str(_shared))
+    from site_llm import generate_md_text
+    return generate_md_text(prompt)
+
+
 from content_quality import (
     INSIGHT_MIN_CHARS,
     QUALITY_PROMPT_RULES,
     is_blocked_insight_id,
 )
 from md_clean import prepare_insight_md
-from resolve_secrets import ensure_gemini_api_key
 from topic_queue_csv import resolve as resolve_queue_csv
 
 
@@ -32,7 +42,7 @@ def _emit_pipeline_result(**kwargs):
     except ImportError:
         pass
 
-MODEL = "gemini-2.5-flash"
+MODEL = "claude"  # via CLI
 RETRYABLE_ERRORS = ("SSL", "UNEXPECTED_EOF", "503", "429", "timeout", "Connection")
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
@@ -58,34 +68,11 @@ def _normalize_categories(raw: str) -> str:
 
 
 def _generate_content(client, prompt: str):
-    last_err: Exception | None = None
-    for attempt in range(3):
-        try:
-            return client.models.generate_content(model=MODEL, contents=prompt)
-        except Exception as e:
-            last_err = e
-            if attempt < 2 and any(tok in str(e) for tok in RETRYABLE_ERRORS):
-                time.sleep(2 ** attempt)
-                continue
-            raise
-    if last_err:
-        raise last_err
-    raise RuntimeError("generate_content failed")
+    return type("R", (), {"text": _claude_md(prompt)})()
 
 
 def generate_insight(row: dict[str, str]) -> bool:
-    if not ensure_gemini_api_key():
-        print("❌ GEMINI_API_KEY is missing")
-        return False
-
-    try:
-        from google import genai
-
-        client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-    except ImportError:
-        print("❌ google-genai required: pip install google-genai")
-        return False
-
+    
     iid = (row.get("id") or "").strip()
     topic = (row.get("topic") or iid).strip()
     intervention = (row.get("intervention") or "").strip()
@@ -143,9 +130,9 @@ Keep effect ranges consistent with frontmatter. Tone: concise, cite-style, no fa
 Minimum {INSIGHT_MIN_CHARS} characters in body.
 """
         try:
-            response = _generate_content(client, prompt)
+            response_text = _claude_md(prompt)
             final_text = prepare_insight_md(
-                response.text,
+                response_text,
                 insight_id=iid,
                 fallback_title=topic,
                 fallback_intervention=intervention,

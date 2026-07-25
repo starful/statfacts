@@ -12,10 +12,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from resolve_secrets import ensure_gemini_api_key
+def _claude_md(prompt: str) -> str:
+    """MD text via Claude CLI subscription (not Claude API)."""
+    import sys
+    from pathlib import Path
+    _shared = Path(__file__).resolve().parents[2] / "shared"
+    if str(_shared) not in sys.path:
+        sys.path.insert(0, str(_shared))
+    from site_llm import generate_md_text
+    return generate_md_text(prompt)
 
-ensure_gemini_api_key()
-API_KEY = os.environ.get("GEMINI_API_KEY", "").strip()
+
+# GEMINI_API_KEY no longer required for MD (Claude CLI)
 
 SCRIPT_DIR  = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR    = os.path.dirname(SCRIPT_DIR)
@@ -58,17 +66,6 @@ def clean_ai_response(text: str) -> str:
 
 def generate_item_article(safe_name: str, name: str, lat: str, lng: str,
                           address: str, lang: str, features: str, agoda: str = ''):
-    if not ensure_gemini_api_key():
-        print("❌ GEMINI_API_KEY is missing — set env, .env, or GCP Secret Manager (GEMINI_API_KEY)")
-        return
-
-    try:
-        from google import genai
-        client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-    except ImportError:
-        print("❌ google-genai package is missing: pip install google-genai")
-        return
-
     cat_list = ", ".join(PROMPT_CONFIG["categories"][lang])
     item_type = PROMPT_CONFIG["item_type"] if lang == "en" else PROMPT_CONFIG["item_type_ko"]
     min_len   = PROMPT_CONFIG["min_length"]
@@ -117,11 +114,8 @@ IMPORTANT: image_prompt must be a single line inside double quotes.
 """
 
     try:
-        response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=prompt
-        )
-        final_text = clean_ai_response(response.text)
+        response_text = _claude_md(prompt)
+        final_text = clean_ai_response(response_text)
         os.makedirs(CONTENT_DIR, exist_ok=True)
         filename = f"{safe_name}_{lang}.md"
         with open(os.path.join(CONTENT_DIR, filename), 'w', encoding='utf-8') as f:

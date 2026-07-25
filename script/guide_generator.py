@@ -16,13 +16,23 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+def _claude_md(prompt: str) -> str:
+    """MD text via Claude CLI subscription (not Claude API)."""
+    import sys
+    from pathlib import Path
+    _shared = Path(__file__).resolve().parents[2] / "shared"
+    if str(_shared) not in sys.path:
+        sys.path.insert(0, str(_shared))
+    from site_llm import generate_md_text
+    return generate_md_text(prompt)
+
+
 from content_quality import (
     GUIDE_MIN_CHARS,
     QUALITY_PROMPT_RULES,
     is_blocked_guide_id,
 )
 from md_clean import prepare_guide_md
-from resolve_secrets import ensure_gemini_api_key
 from topic_queue_csv import resolve as resolve_queue_csv
 
 
@@ -34,7 +44,7 @@ def _emit_pipeline_result(**kwargs):
     except ImportError:
         pass
 
-MODEL = "gemini-2.5-flash"
+MODEL = "claude"  # via CLI
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SCRIPT_DIR)
 GUIDE_DIR = os.path.join(BASE_DIR, "app", "content", "guides")
@@ -48,18 +58,7 @@ def _guide_exists(guide_id: str) -> bool:
 
 
 def generate_guide(guide_id: str, topic: str, keywords: str) -> bool:
-    if not ensure_gemini_api_key():
-        print("❌ GEMINI_API_KEY is missing — set env, .env, or GCP Secret Manager (GEMINI_API_KEY)")
-        return False
-
-    try:
-        from google import genai
-
-        client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-    except ImportError:
-        print("❌ google-genai package required: pip install google-genai")
-        return False
-
+    
     if is_blocked_guide_id(guide_id):
         print(f"⏭️ Blocked guide id: {guide_id}")
         return False
@@ -101,9 +100,9 @@ date: "{datetime.now().strftime('%Y-%m-%d')}"
 Tone: precise, no hype. Do not invent specific study citations — describe how to use benchmarks responsibly.
 """
         try:
-            response = client.models.generate_content(model=MODEL, contents=prompt)
+            response_text = _claude_md(prompt)
             final_text = prepare_guide_md(
-                response.text,
+                response_text,
                 guide_id=guide_id,
                 fallback_title=topic,
                 fallback_summary=topic,

@@ -7,7 +7,7 @@ Built on the OK Series stack: **Markdown → JSON → Flask → Cloud Run**.
 ## Quick Start (local)
 
 ```bash
-cd okstats
+cd statfacts
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -33,7 +33,7 @@ Later KO/JA: add `{id}_ko.md` with translated hook and a separate `image_prompt`
 ## Project Structure
 
 ```text
-okstats/                     # repo folder (StatFacts app)
+statfacts/                     # repo folder (StatFacts app)
 ├── app/
 │   ├── __init__.py          # Routes, cache, sitemap
 │   ├── config.py            # Site config (categories, branding)
