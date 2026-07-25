@@ -1,7 +1,31 @@
 {
-  "last_updated": "2026.07.25",
-  "total_count": 103,
+  "last_updated": "2026-07-25",
+  "total_count": 104,
   "insights": [
+    {
+      "id": "beetroot-juice-endurance-performance_en",
+      "slug": "beetroot-juice-endurance-performance",
+      "lang": "en",
+      "title": "Can Beetroot Juice Before Exercise Extend Time to Exhaustion?",
+      "summary": "Meta-analyses show beetroot juice taken 2-3 hours before exercise raises time-to-exhaustion by 4-10% in high-intensity endurance efforts.",
+      "categories": [
+        "sports",
+        "nutrition"
+      ],
+      "intervention": "Consuming dietary nitrate-rich beetroot juice 2-3 hours prior to athletic exertion to enhance muscle oxygenation",
+      "outcome": "Time-to-exhaustion during high-intensity endurance running or cycling",
+      "effect_label": "+4–10%",
+      "effect_min": 4,
+      "effect_max": 10,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Recreational and trained endurance athletes performing high-intensity running or cycling time-to-exhaustion trials",
+      "confidence": "meta_analysis",
+      "hook": "A shot of beet juice before training could buy you several extra minutes of hard effort.",
+      "thumbnail": "/static/images/beetroot-juice-endurance-performance.jpg",
+      "published": "2026-07-25",
+      "link": "/insight/beetroot-juice-endurance-performance_en"
+    },
     {
       "id": "floating-add-to-cart-conversion_en",
       "slug": "floating-add-to-cart-conversion",
@@ -644,7 +668,7 @@
       "confidence": "study",
       "hook": "The secret to perfectly peeled hard-boiled eggs might be simpler than you think – a quick plunge into icy water.",
       "thumbnail": "/static/images/ice-water-egg-peeling.jpg",
-      "published": "2026-07-20",
+      "published": "2026-07-25",
       "link": "/insight/ice-water-egg-peeling_en"
     },
     {
