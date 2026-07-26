@@ -1,7 +1,79 @@
 {
-  "last_updated": "2026.07.26",
-  "total_count": 110,
+  "last_updated": "2026.07.27",
+  "total_count": 113,
   "insights": [
+    {
+      "id": "empty-state-illustration-engagement_en",
+      "slug": "empty-state-illustration-engagement",
+      "lang": "en",
+      "title": "Do Illustrated Empty States With a Call-to-Action Boost Feature Adoption?",
+      "summary": "A/B tests show illustrated empty states with a clear CTA lift first-time feature adoption by 12-28% relative to blank or text-only empty states.",
+      "categories": [
+        "ux",
+        "onboarding"
+      ],
+      "intervention": "Replacing blank empty states with illustrated empty states that include a clear call-to-action",
+      "outcome": "feature adoption rate among first-time users who reach the empty state",
+      "effect_label": "+12–28%",
+      "effect_min": 12,
+      "effect_max": 28,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "First-time users of a feature who land on an empty state (e.g., no projects, no reports, no saved items yet) before taking their first meaningful action",
+      "confidence": "ab_test",
+      "hook": "The blank screen your new users see might be the reason they never come back.",
+      "thumbnail": "/static/images/empty-state-illustration-engagement.jpg",
+      "published": "2026-07-27",
+      "link": "/insight/empty-state-illustration-engagement_en"
+    },
+    {
+      "id": "skip-level-meeting-engagement_en",
+      "slug": "skip-level-meeting-engagement",
+      "lang": "en",
+      "title": "Do quarterly skip-level meetings raise employee engagement scores?",
+      "summary": "Quarterly skip-level meetings between ICs and leaders two levels up are associated with a 4-11 percentage point rise in engagement survey scores.",
+      "categories": [
+        "hr",
+        "employee-engagement"
+      ],
+      "intervention": "Scheduling quarterly skip-level meetings between individual contributors and senior leadership two levels up",
+      "outcome": "employee engagement survey scores",
+      "effect_label": "+4–11%",
+      "effect_min": 4,
+      "effect_max": 11,
+      "effect_unit": "percent_point",
+      "effect_direction": "increase",
+      "sample_context": "Individual contributors at mid-size to large organizations (roughly 200+ employees) with at least three layers of management between ICs and senior leadership",
+      "confidence": "study",
+      "hook": "The meeting nobody schedules turns out to move the engagement needle more than most perks programs.",
+      "thumbnail": "/static/images/skip-level-meeting-engagement.jpg",
+      "published": "2026-07-27",
+      "link": "/insight/skip-level-meeting-engagement_en"
+    },
+    {
+      "id": "red-eye-flight-fare-savings_en",
+      "slug": "red-eye-flight-fare-savings",
+      "lang": "en",
+      "title": "Do Red-Eye Flights Really Cost Less Than Daytime Departures?",
+      "summary": "Choosing an overnight red-eye departure over a comparable daytime flight on the same route tends to lower the fare paid by roughly 10-25%.",
+      "categories": [
+        "travel",
+        "flight-booking"
+      ],
+      "intervention": "Booking overnight red-eye flights instead of comparable daytime departures on the same route",
+      "outcome": "average airfare paid per ticket",
+      "effect_label": "-10–25%",
+      "effect_min": 10,
+      "effect_max": 25,
+      "effect_unit": "percent_relative",
+      "effect_direction": "decrease",
+      "sample_context": "Leisure and budget-conscious travelers booking domestic or long-haul routes where both red-eye and daytime departure options exist",
+      "confidence": "estimate",
+      "hook": "The cheapest seat on the plane is often the one nobody wants to wake up for.",
+      "thumbnail": "/static/images/red-eye-flight-fare-savings.jpg",
+      "published": "2026-07-27",
+      "link": "/insight/red-eye-flight-fare-savings_en"
+    },
     {
       "id": "skeleton-loading-screens_en",
       "slug": "skeleton-loading-screens",
