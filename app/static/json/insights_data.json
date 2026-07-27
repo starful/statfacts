@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026.07.27",
+  "last_updated": "2026-07-27",
   "total_count": 113,
   "insights": [
     {
@@ -691,7 +691,7 @@
       "confidence": "study",
       "hook": "Unlock the secret to impossibly fluffy pancakes with one simple step: a short rest.",
       "thumbnail": "/static/images/resting-pancake-batter.jpg",
-      "published": "2026-07-20",
+      "published": "2026-07-27",
       "link": "/insight/resting-pancake-batter_en"
     },
     {
@@ -1242,7 +1242,7 @@
       "confidence": "study",
       "hook": "Unlock a powerful flavor boost in your cooking with this simple, ancient technique!",
       "thumbnail": "/static/images/blooming-spices-in-oil.jpg",
-      "published": "2026-07-05",
+      "published": "2026-07-27",
       "link": "/insight/blooming-spices-in-oil_en"
     },
     {
