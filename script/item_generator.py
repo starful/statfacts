@@ -65,7 +65,7 @@ def clean_ai_response(text: str) -> str:
 
 
 def generate_item_article(safe_name: str, name: str, lat: str, lng: str,
-                          address: str, lang: str, features: str, agoda: str = ''):
+                          address: str, lang: str, features: str):
     cat_list = ", ".join(PROMPT_CONFIG["categories"][lang])
     item_type = PROMPT_CONFIG["item_type"] if lang == "en" else PROMPT_CONFIG["item_type_ko"]
     min_len   = PROMPT_CONFIG["min_length"]
@@ -97,7 +97,6 @@ categories: ["Category1", "Category2"]
 thumbnail: "/static/images/{safe_name}.jpg"
 address: "{address}"
 date: "{datetime.now().strftime('%Y-%m-%d')}"
-agoda: "{agoda}"
 summary: "Write a 2-3 sentence summary that hooks readers. Keep it on one line."
 image_prompt: "Single-line Imagen prompt IN ENGLISH for a photo of {name}. Include: shot type [overhead/side/45-degree/close-up], lighting [natural/moody/bright], and specific visual details about {features}."
 ---
@@ -144,8 +143,7 @@ def run_generator(limit: int = 10):
                         safe_name, name,
                         row.get('Lat', '0'), row.get('Lng', '0'),
                         row.get('Address', 'Japan'), lang,
-                        row.get('Features', ''), row.get('Agoda', '')
-                    ))
+                        row.get('Features', '')))
             if len(tasks) >= limit * 2:
                 break
 

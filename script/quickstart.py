@@ -32,7 +32,7 @@ def _write_if_needed(path: str, content: str, force: bool) -> bool:
     return True
 
 
-def _item_markdown(name: str, safe_name: str, lat: str, lng: str, address: str, features: str, agoda: str, lang: str) -> str:
+def _item_markdown(name: str, safe_name: str, lat: str, lng: str, address: str, features: str, lang: str) -> str:
     today = datetime.now().strftime("%Y-%m-%d")
     if lang == "ko":
         title = f"{name}: Korean Guide"
@@ -62,7 +62,6 @@ categories: {categories}
 thumbnail: "/static/images/{safe_name}.jpg"
 address: "{address}"
 date: "{today}"
-agoda: "{agoda}"
 summary: "{summary}"
 image_prompt: "Editorial travel photo of {name}, natural light, realistic details."
 ---
@@ -126,12 +125,11 @@ def generate_items(force: bool) -> int:
                 continue
             address = (row.get("Address") or "Japan").strip().replace('"', '\\"')
             features = (row.get("Features") or "").strip().replace('"', '\\"')
-            agoda = (row.get("Agoda") or "").strip().replace('"', '\\"')
 
             for lang in ("en", "ko"):
                 filename = f"{safe_name}_{lang}.md"
                 out_path = os.path.join(CONTENT_DIR, filename)
-                content = _item_markdown(name, safe_name, lat, lng, address, features, agoda, lang)
+                content = _item_markdown(name, safe_name, lat, lng, address, features, lang)
                 if _write_if_needed(out_path, content, force):
                     created += 1
     if skipped_invalid_coords:
