@@ -1,5 +1,13 @@
 # StatFacts
 
+| | |
+|--|--|
+| **Live** | [https://statfacts.net](https://statfacts.net) |
+| **GitHub** | [starful/statfacts](https://github.com/starful/statfacts) |
+| **Hub ID** | `statfacts` |
+| **GA4** | Property `540984431` · GSC `sc-domain:statfacts.net` |
+| **GCS** | `ok-project-assets/statfacts/` |
+
 **https://statfacts.net** — Curated **if X → then Y%** benchmarks with context, ranges, and sources.
 
 Built on the OK Series stack: **Markdown → JSON → Flask → Cloud Run**.
@@ -76,3 +84,9 @@ Launch language is English only. Schema supports future `lang` fields for KO/JA.
 ```bash
 SITE_URL=https://statfacts.net ./deploy.sh
 ```
+
+## OK Admin (Work Hub)
+
+- **Pipeline:** `insight_generator` → guides → `fetch_images` → optimize → build
+- **Content tab** for batch generation · **Git tab** Ship workflow · **Deploy tab** from `main`
+- [okadmin/README.md](../okadmin/README.md)
