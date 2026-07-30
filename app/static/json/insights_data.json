@@ -1,7 +1,124 @@
 {
-  "last_updated": "2026-07-27",
-  "total_count": 113,
+  "last_updated": "2026.07.30",
+  "total_count": 116,
   "insights": [
+    {
+      "id": "micro-interaction-delight-nps_en",
+      "slug": "micro-interaction-delight-nps",
+      "lang": "en",
+      "title": "How Much Can Micro-Interactions Boost Your Net Promoter Score?",
+      "summary": "Layering subtle animation, press feedback, and haptics across a product lifted NPS by 8–16 percentage points in controlled tests.",
+      "categories": [
+        "ux"
+      ],
+      "intervention": "Adding subtle animations, button press feedback, loading transitions, and haptic responses throughout the product",
+      "outcome": "Net Promoter Score improvement",
+      "effect_label": "+8–16%",
+      "effect_min": 8,
+      "effect_max": 16,
+      "effect_unit": "percent_point",
+      "effect_direction": "increase",
+      "sample_context": "Consumer mobile and web apps with existing NPS tracking, tested via before/after or A/B rollout of a polish pass covering button feedback, loading states, and haptics",
+      "confidence": "ab_test",
+      "hook": "The buttons didn't get smarter. They just started feeling alive.",
+      "thumbnail": "/static/images/micro-interaction-delight-nps.jpg",
+      "published": "2026-07-30",
+      "link": "/insight/micro-interaction-delight-nps_en"
+    },
+    {
+      "id": "transparent-career-ladder-retention_en",
+      "slug": "transparent-career-ladder-retention",
+      "lang": "en",
+      "title": "Does Publishing Career Progression Tiers Improve Employee Retention?",
+      "summary": "Publishing clear career tiers and promotion criteria is linked to a 12-20% relative increase in annual retention.",
+      "categories": [
+        "business"
+      ],
+      "intervention": "Publishing explicit career progression tiers and promotion criteria to all employees",
+      "outcome": "Annual employee retention rate",
+      "effect_label": "+12–20%",
+      "effect_min": 12,
+      "effect_max": 20,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Mid-to-large employers (roughly 300+ staff) with multiple job levels or job families, measured over 12-24 months after publishing tiers and criteria",
+      "confidence": "study",
+      "hook": "The org chart isn't the problem. The mystery behind it is.",
+      "thumbnail": "/static/images/transparent-career-ladder-retention.jpg",
+      "published": "2026-07-30",
+      "link": "/insight/transparent-career-ladder-retention_en"
+    },
+    {
+      "id": "cross-platform-progress-sync-retention_en",
+      "slug": "cross-platform-progress-sync-retention",
+      "lang": "en",
+      "title": "Does Cross-Platform Cloud Save Sync Improve 30-Day Player Retention?",
+      "summary": "A/B tests show enabling seamless cloud progress sync across mobile, console, and PC raises 30-day retention by 7-15% relative to players without cross-platform handoff.",
+      "categories": [
+        "gaming"
+      ],
+      "intervention": "Enabling cloud-based progress sync across mobile, console, and PC platforms with seamless handoff",
+      "outcome": "30-day player retention rate",
+      "effect_label": "+7–15%",
+      "effect_min": 7,
+      "effect_max": 15,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Players of multiplatform titles (mobile, console, PC) who have accounts on two or more platforms; measured over a 30-day post-install/post-update window",
+      "confidence": "ab_test",
+      "hook": "Let players pick up their run on any screen, and more of them come back a month later.",
+      "thumbnail": "/static/images/cross-platform-progress-sync-retention.jpg",
+      "published": "2026-07-30",
+      "link": "/insight/cross-platform-progress-sync-retention_en"
+    },
+    {
+      "id": "blooming-spices-in-oil_en",
+      "slug": "blooming-spices-in-oil",
+      "lang": "en",
+      "title": "Does blooming spices in oil significantly enhance the flavor of a dish?",
+      "summary": "Heating ground spices in oil or cooking fat before adding liquids can increase the sensory flavor intensity of a finished dish by 15% to 30%.",
+      "categories": [
+        "food",
+        "cooking"
+      ],
+      "intervention": "Heating ground spices in oil or cooking fat before adding liquid ingredients",
+      "outcome": "Sensory flavor intensity scores of the finished dish",
+      "effect_label": "+15–30%",
+      "effect_min": 15,
+      "effect_max": 30,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "For home cooks and professional chefs preparing dishes that incorporate ground spices.",
+      "confidence": "study",
+      "hook": "Unlock a powerful flavor boost in your cooking with this simple, ancient technique!",
+      "thumbnail": "/static/images/blooming-spices-in-oil.jpg",
+      "published": "2026-07-27",
+      "link": "/insight/blooming-spices-in-oil_en"
+    },
+    {
+      "id": "resting-pancake-batter_en",
+      "slug": "resting-pancake-batter",
+      "lang": "en",
+      "title": "Why You Should Rest Pancake Batter for Fluffier Pancakes",
+      "summary": "Resting pancake batter for 15-30 minutes can significantly increase pancake height and physical fluffiness by 15-25%.",
+      "categories": [
+        "food",
+        "baking"
+      ],
+      "intervention": "Resting pancake batter for 15 to 30 minutes before cooking to allow gluten to relax and starch to fully hydrate",
+      "outcome": "Average pancake height and physical fluffiness",
+      "effect_label": "+15–25%",
+      "effect_min": 15,
+      "effect_max": 25,
+      "effect_unit": "percent_relative",
+      "effect_direction": "increase",
+      "sample_context": "Home bakers and cooks aiming to improve pancake texture and height.",
+      "confidence": "study",
+      "hook": "Unlock the secret to impossibly fluffy pancakes with one simple step: a short rest.",
+      "thumbnail": "/static/images/resting-pancake-batter.jpg",
+      "published": "2026-07-27",
+      "link": "/insight/resting-pancake-batter_en"
+    },
     {
       "id": "empty-state-illustration-engagement_en",
       "slug": "empty-state-illustration-engagement",
@@ -671,30 +788,6 @@
       "link": "/insight/difficulty-options-retention_en"
     },
     {
-      "id": "resting-pancake-batter_en",
-      "slug": "resting-pancake-batter",
-      "lang": "en",
-      "title": "Why You Should Rest Pancake Batter for Fluffier Pancakes",
-      "summary": "Resting pancake batter for 15-30 minutes can significantly increase pancake height and physical fluffiness by 15-25%.",
-      "categories": [
-        "food",
-        "baking"
-      ],
-      "intervention": "Resting pancake batter for 15 to 30 minutes before cooking to allow gluten to relax and starch to fully hydrate",
-      "outcome": "Average pancake height and physical fluffiness",
-      "effect_label": "+15–25%",
-      "effect_min": 15,
-      "effect_max": 25,
-      "effect_unit": "percent_relative",
-      "effect_direction": "increase",
-      "sample_context": "Home bakers and cooks aiming to improve pancake texture and height.",
-      "confidence": "study",
-      "hook": "Unlock the secret to impossibly fluffy pancakes with one simple step: a short rest.",
-      "thumbnail": "/static/images/resting-pancake-batter.jpg",
-      "published": "2026-07-27",
-      "link": "/insight/resting-pancake-batter_en"
-    },
-    {
       "id": "trust-badges-checkout_en",
       "slug": "trust-badges-checkout",
       "lang": "en",
@@ -1220,30 +1313,6 @@
       "thumbnail": "/static/images/peer-to-peer-recognition.jpg",
       "published": "2026-07-08",
       "link": "/insight/peer-to-peer-recognition_en"
-    },
-    {
-      "id": "blooming-spices-in-oil_en",
-      "slug": "blooming-spices-in-oil",
-      "lang": "en",
-      "title": "Does blooming spices in oil significantly enhance the flavor of a dish?",
-      "summary": "Heating ground spices in oil or cooking fat before adding liquids can increase the sensory flavor intensity of a finished dish by 15% to 30%.",
-      "categories": [
-        "food",
-        "cooking"
-      ],
-      "intervention": "Heating ground spices in oil or cooking fat before adding liquid ingredients",
-      "outcome": "Sensory flavor intensity scores of the finished dish",
-      "effect_label": "+15–30%",
-      "effect_min": 15,
-      "effect_max": 30,
-      "effect_unit": "percent_relative",
-      "effect_direction": "increase",
-      "sample_context": "For home cooks and professional chefs preparing dishes that incorporate ground spices.",
-      "confidence": "study",
-      "hook": "Unlock a powerful flavor boost in your cooking with this simple, ancient technique!",
-      "thumbnail": "/static/images/blooming-spices-in-oil.jpg",
-      "published": "2026-07-27",
-      "link": "/insight/blooming-spices-in-oil_en"
     },
     {
       "id": "live-chat-pricing-page_en",
