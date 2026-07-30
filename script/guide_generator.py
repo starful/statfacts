@@ -67,7 +67,7 @@ def generate_guide(guide_id: str, topic: str, keywords: str) -> bool:
 
     feedback = ""
     last_err: Exception | None = None
-    for attempt in range(3):
+    for attempt in range(2):
         feedback_block = f"\n[FIX PREVIOUS FAILURE]\n{feedback}\n" if feedback else ""
         prompt = f"""
 You are an editorial writer for StatFacts (statfacts.net), a site about effect-size benchmarks for product, business, sports, and health teams.
